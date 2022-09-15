@@ -3,12 +3,14 @@
 
 bl_info = {
     "name": "Forge Data Exporter",
-    "author": "DerrikCreates.com",
+    "author": "DerrikCreates",
     "description": "export forge items for latter processing into a .mvar",
+    "version": (0.1),
     "blender": (3, 3, 0),
     "location": "View3D",
     "warning": "",
-    "category": "Generic"
+    "category": "Generic",
+    "doc_url": "https://github.com/DerrikCreates/Halo-Infinite-Forge-For-Blender"
 }
 
 import bpy
@@ -22,7 +24,6 @@ def export_item_data(context, filepath):
     print("Collecting Forge Data...")
     test = ItemData()
     test.rotX = 1
-
 
     print(test.toJSON())
 
@@ -38,12 +39,13 @@ def export_item_data(context, filepath):
         print("checking object " + evalObject.name)
         print(evalObject.data.attributes)
         if len(evalObject.data.attributes) < 2:
-            print( "----"+ evalObject.name + "----")
+            print("----" + evalObject.name + "----")
             if len(evalObject.data.attributes) != 0:
                 for attr in evalObject.data.attributes:
                     print(attr.name)
 
     return {'FINISHED'}
+
 
 # basePath = "G:/__Inbox/"
 # data = object_eval.data
@@ -56,15 +58,13 @@ def export_item_data(context, filepath):
 #  CollectData(data.attributes['InstanceRotation'].data,
 #             basePath + "Rotation.txt")
 
-#f = open(filepath, 'w', encoding='utf-8')
-#f.write("Hello World %s" % use_some_setting)
-#f.close()
+# f = open(filepath, 'w', encoding='utf-8')
+# f.write("Hello World %s" % use_some_setting)
+# f.close()
 
 # get up and forward rotation
 # up = obj.matrix_world.to_quaternion() @ Vector((0.0, 1.0, 0.0))
 # forward = obj.matrix_world.to_quaternion() @ Vector((0.0, 0.0, 1.0))
-
-
 
 
 def CollectData(dataList, filePath):
@@ -99,7 +99,6 @@ class ItemData:
                           sort_keys=True, indent=4)
 
 
-
 class ForgeItemPropertiesPanel(bpy.types.Panel):
     """Creates a Panel in the Object properties window"""
     bl_label = "Forge Item Properties"
@@ -126,8 +125,7 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
     # row.operator("mesh.primitive_cube_add")
 
 
-
-class ExportSomeData(Operator, ExportHelper): #panel for exporting data
+class ExportSomeData(Operator, ExportHelper):  # panel for exporting data
     """Exporter to save item data for later processing into an mvar format"""
     bl_idname = "halo_forge.save_item_data"  # important since its how bpy.ops.import_test.some_data is constructed
     bl_label = "Export Halo Forge Data"
@@ -175,18 +173,18 @@ def register():
     bpy.utils.register_class(ForgeItemPropertiesPanel)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
 
-    #Propertys
+    # Propertys
     bpy.types.Object.forge_test_prop = bpy.props.StringProperty(
         name='Object scoped prop test',
     )
 
     bpy.types.Object.forge_enum = bpy.props.EnumProperty(
-        name = "",
+        name="",
         description="Forge Enum Prop",
-        items= [
-            ('OP1',"Option 1 Name","Test 1 Tooltip desc"),
-            ('OP2',"Option 2 Name","Test 2 Tooltip desc"),
-            ('OP2',"Option 3 Name","Test 3 Tooltip desc"),
+        items=[
+            ('OP1', "Option 1 Name", "Test 1 Tooltip desc"),
+            ('OP2', "Option 2 Name", "Test 2 Tooltip desc"),
+            ('OP2', "Option 3 Name", "Test 3 Tooltip desc"),
         ]
     )
 
@@ -202,4 +200,3 @@ if __name__ == "__main__":
 
     # test call
     bpy.ops.halo_forge.save_item_data('INVOKE_DEFAULT')
-
