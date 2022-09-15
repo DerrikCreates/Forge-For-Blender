@@ -46,7 +46,7 @@ def export_item_data(context, filepath):
 
     return {'FINISHED'}
 
-
+# THIS IS THE EXAMPLE ON GETING ATTRIBUTE DATA OUT OF NODE GRAPH 
 # basePath = "G:/__Inbox/"
 # data = object_eval.data
 # CollectData(data.attributes['ID'].data,
