@@ -31,6 +31,8 @@ partial class Form1
     {
             this.button1 = new System.Windows.Forms.Button();
             this.FileListLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -50,11 +52,32 @@ partial class Form1
             this.FileListLayoutPanel.Size = new System.Drawing.Size(162, 365);
             this.FileListLayoutPanel.TabIndex = 1;
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(276, 73);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(512, 365);
+            this.flowLayoutPanel1.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Location = new System.Drawing.Point(276, 42);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(512, 28);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Loaded Map Data";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.FileListLayoutPanel);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
@@ -68,4 +91,6 @@ partial class Form1
     private OpenFileDialog openFileDialog1;
     private Button button1;
     private FlowLayoutPanel FileListLayoutPanel;
+    private FlowLayoutPanel flowLayoutPanel1;
+    private Label label1;
 }
