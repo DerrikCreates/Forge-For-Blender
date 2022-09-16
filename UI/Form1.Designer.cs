@@ -37,17 +37,17 @@ partial class Form1
             // 
             this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(110, 23);
+            this.button1.Size = new System.Drawing.Size(162, 55);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Load Map XML";
+            this.button1.Text = "Choose folder with xml map files";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // FileListLayoutPanel
             // 
-            this.FileListLayoutPanel.Location = new System.Drawing.Point(12, 41);
+            this.FileListLayoutPanel.Location = new System.Drawing.Point(12, 73);
             this.FileListLayoutPanel.Name = "FileListLayoutPanel";
-            this.FileListLayoutPanel.Size = new System.Drawing.Size(162, 397);
+            this.FileListLayoutPanel.Size = new System.Drawing.Size(162, 365);
             this.FileListLayoutPanel.TabIndex = 1;
             // 
             // Form1
