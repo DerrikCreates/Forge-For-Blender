@@ -40,9 +40,6 @@ public class Transform
     public Vector3 Rotation { get; set; }
 
 
-    public Transform()
-    {
-        Vector3 v = new Vector3(90, 0, 0);
-        Vector3.Transform(v,)
-    }
+    
+    
 }
