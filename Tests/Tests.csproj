@@ -31,7 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Util\Util.csproj" />
+      <ProjectReference Include="..\Utils\Utils.csproj" />
     </ItemGroup>
 
   
