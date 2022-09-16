@@ -1,7 +1,4 @@
-// ReSharper disable All
-
 using System.Numerics;
-using InfiniteForgePacker.Game;
 
 namespace ForgeTools.Core;
 
@@ -17,12 +14,4 @@ public class Transform
     public Vector3 Position { get; set; }
     public Vector3 Scale { get; set; }
     public Vector3 Rotation { get; set; }
-}
-
-public class ForgeItem
-{
-    public ObjectId ItemId { get; set; }
-    public Transform Transform { get; set; }
-
-    //TODO add other item properties like material ids and color
 }
