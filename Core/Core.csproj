@@ -7,4 +7,17 @@
         <RootNamespace>ForgeTools.Core</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Remove="InfiniteForgePacker.dll" />
+      <Resource Include="InfiniteForgePacker.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="InfiniteForgePacker">
+        <HintPath>InfiniteForgePacker.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
