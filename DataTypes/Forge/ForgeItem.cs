@@ -1,5 +1,6 @@
 // ReSharper disable All
 
+using DataTypes.Forge;
 using InfiniteForgePacker.Game;
 
 namespace ForgeTools.Core;

@@ -1,4 +1,4 @@
-namespace ForgeTools.Core;
+namespace DataTypes.Forge;
 
 /// <summary>
 /// This object represents list id 24 inside of the
