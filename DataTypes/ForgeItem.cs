@@ -14,10 +14,9 @@ public class ForgeItem
     /// The rotation position and scale of the object
     /// </summary>
     public Transform Transform { get; set; }
-    /// <summary>
-    /// This is the variantID
-    /// </summary>
-    public int VariantID;
+
+    public AdditionalItemSettings AdditionalSettings { get; set; }      
+   
 
     //TODO add other item properties like material ids and color
 }
