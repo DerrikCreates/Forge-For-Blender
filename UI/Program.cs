@@ -1,4 +1,6 @@
 using System.Numerics;
+using System.Reflection;
+using Newtonsoft.Json;
 using Serilog;
 using Serilog.Formatting.Compact;
 
@@ -8,6 +10,11 @@ using System.Runtime.InteropServices;
 
 static class Program
 {
+    public static Settings Settings;
+
+    public static readonly string SettingsPath =
+        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Settings/";
+
     /// <summary>
     ///  The main entry point for the application.
     /// </summary>
@@ -31,13 +38,45 @@ static class Program
             .CreateLogger();
 
 
-        Log.Information("Starting App");
+        Log.Information("Loading Settings...");
+        var jsonPath = SettingsPath + "Settings.json";
+        var file = new FileInfo(jsonPath);
+        file.Directory.Create(); // should only create dir if it doesnt exist
+        if (File.Exists(jsonPath) == true)
+        {
+            Settings? deserializeObject = null;
+            try
+            {
+                deserializeObject = JsonConvert.DeserializeObject<Settings>(file.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Log.Error("Caught exception while trying to parse settings {Exception}", e);
+            }
+
+            if (deserializeObject == null)
+            {
+                Log.Warning("Could not load settings. Creating new settings object and saving");
+                Settings = new Settings();
+                File.WriteAllText(file.ToString(), JsonConvert.SerializeObject(Settings, Formatting.Indented));
+            }
+        }
+        else
+        {
+            File.Create(file.ToString()).Dispose();
+            Settings = new Settings();
+            File.WriteAllText(file.ToString(), JsonConvert.SerializeObject(Settings, Formatting.Indented));
+        }
+
+        Log.Information("Starting App...");
         // To customize application configuration such as set high DPI settings or default font,
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
         Application.Run(new Form1());
 
-       
+
+        File.WriteAllText(file.Name, JsonConvert.SerializeObject(Settings));
     }
 
 
