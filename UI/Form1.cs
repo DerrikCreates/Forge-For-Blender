@@ -1,28 +1,27 @@
 using System.Numerics;
+using ForgeTools;
 using Serilog;
 
 namespace DerriksForgeTools;
 
 public partial class Form1 : Form
 {
-    private Button[] _mapSelectButtons = new Button[10];
+    private Dictionary<Button, string> fileButtons = new Dictionary<Button, string>();
 
     public Form1()
     {
         InitializeComponent();
-
-        for (int i = 0; i < 10; i++)
-        {
-            var b = new Button();
-            b.Name = "Empty";
-            FileListLayoutPanel.Controls.Add(b);
-            _mapSelectButtons[i] = b;
-        }
     }
 
+    private string _activeFile;
 
-    private List<string> _directoryFiles = new List<string>();
-    private Dictionary<Button, string> _fileButtons = new Dictionary<Button, string>();
+    private void OnFileButtonClick(object? sender, EventArgs e)
+    {
+        var path = fileButtons[(Button)sender];
+
+        LoadFile(new FileInfo(path));
+    }
+
 
     private void DisplayMapData(string xmlPath)
     {
@@ -30,32 +29,48 @@ public partial class Form1 : Form
         Log.Debug("display map data method {XMLPath}", xmlPath);
     }
 
+    private void AddFileToButtonLayout(FileInfo path)
+    {
+        if (fileButtons.ContainsValue(path.FullName) == false)
+        {
+            var b = new Button();
+            b.Text = path.Name;
+            FileListLayoutPanel.Controls.Add(b);
+            fileButtons.Add(b, path.FullName);
+            b.Click += OnFileButtonClick;
+        }
+    }
+
+    private void LoadFile(FileInfo file)
+    {
+        Log.Information("Loading File {FileInfo}", file);
+        _activeFile = file.FullName;
+        label_ActiveFilePath.Text = file.Name;
+
+        var map = Util.BuildMapFromXML(file.FullName);
+    }
+
     private void button1_Click(object sender, EventArgs e)
     {
-        FolderBrowserDialog directoryDialog = new FolderBrowserDialog();
-        directoryDialog.InitialDirectory = Program.Settings.LastUsedPath;
+        OpenFileDialog fileDialog = new OpenFileDialog();
+        fileDialog.InitialDirectory = Program.Settings.LastUsedPath;
+        fileDialog.Filter = "xml files (*.xml)|*.xml";
 
-
-        if (directoryDialog.ShowDialog() == DialogResult.OK)
+        if (fileDialog.ShowDialog() == DialogResult.OK)
         {
-            var fileInfo = new FileInfo(directoryDialog.SelectedPath);
-            Program.Settings.LastUsedPath = directoryDialog.SelectedPath;
-            Log.Information(directoryDialog.SelectedPath);
-
-            _directoryFiles = Directory.GetFiles(directoryDialog.SelectedPath, "*.xml").ToList();
-
-            foreach (var file in _directoryFiles)
-            {
-                Button b = new Button();
-                b.Text = Path.GetFileName(file);
-                _fileButtons.Add(b, file);
-                b.Click += new EventHandler(delegate(object? o, EventArgs args)
-                {
-                    DisplayMapData(_fileButtons[(Button)o]);
-                });
-
-                FileListLayoutPanel.Controls.Add(b);
-            }
+            var fileInfo = new FileInfo(fileDialog.FileName);
+            Program.Settings.LastUsedPath = fileDialog.FileName;
+            Log.Information(fileDialog.FileName);
+            AddFileToButtonLayout(fileInfo);
+            LoadFile(fileInfo);
         }
+    }
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
+    }
+
+    private void button2_Click(object sender, EventArgs e)
+    {
     }
 }

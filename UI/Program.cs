@@ -18,8 +18,6 @@ static class Program
     /// <summary>
     ///  The main entry point for the application.
     /// </summary>
-    ///
-    ///
     [STAThread]
     static void Main()
     {
@@ -76,7 +74,7 @@ static class Program
         Application.Run(new Form1());
 
 
-        File.WriteAllText(file.Name, JsonConvert.SerializeObject(Settings));
+        File.WriteAllText(file.FullName, JsonConvert.SerializeObject(Settings));
     }
 
 

@@ -12,16 +12,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="InfiniteForgeConstants">
-        <HintPath>..\InfiniteForgeConstants.dll</HintPath>
-      </Reference>
-      <Reference Include="InfiniteForgePacker">
-        <HintPath>InfiniteForgePacker.dll</HintPath>
-      </Reference>
+      <ProjectReference Include="..\Utils\Utils.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Utils\Utils.csproj" />
+      <Reference Include="InfiniteForgeConstants">
+        <HintPath>..\Libraries\InfiniteForgeConstants.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

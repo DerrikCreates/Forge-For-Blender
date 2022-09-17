@@ -11,4 +11,13 @@
       <PackageReference Include="Serilog" Version="2.11.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="InfiniteForgeConstants">
+        <HintPath>..\Libraries\InfiniteForgeConstants.dll</HintPath>
+      </Reference>
+      <Reference Include="InfiniteForgePacker">
+        <HintPath>..\Libraries\InfiniteForgePacker.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
