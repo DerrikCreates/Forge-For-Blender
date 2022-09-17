@@ -9,9 +9,6 @@
 
     <ItemGroup>
       <None Remove="InfiniteForgePacker.dll" />
-      <Resource Include="InfiniteForgePacker.dll">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
     </ItemGroup>
 
     <ItemGroup>
@@ -22,6 +19,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Utils\Utils.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="InfiniteForgePacker.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>
