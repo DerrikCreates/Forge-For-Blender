@@ -12,6 +12,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Reference Include="InfiniteForgeConstants">
+        <HintPath>..\InfiniteForgeConstants.dll</HintPath>
+      </Reference>
       <Reference Include="InfiniteForgePacker">
         <HintPath>InfiniteForgePacker.dll</HintPath>
       </Reference>
@@ -19,12 +22,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Utils\Utils.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Resource Include="InfiniteForgePacker.dll">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
     </ItemGroup>
 
 </Project>

@@ -7,19 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="InfiniteForgePacker">
-        <HintPath>..\Core\InfiniteForgePacker.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
       <Folder Include="Forge" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="InfiniteForgeConstants.dll">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
 </Project>

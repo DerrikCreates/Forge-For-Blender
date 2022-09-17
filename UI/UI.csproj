@@ -7,6 +7,7 @@
         <UseWindowsForms>true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>DerriksForgeTools</RootNamespace>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,7 +24,17 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Core\Core.csproj" />
       <ProjectReference Include="..\Utils\Utils.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="InfiniteForgeConstants">
+        <HintPath>..\Libraries\InfiniteForgeConstants.dll</HintPath>
+      </Reference>
+      <Reference Include="InfiniteForgePacker">
+        <HintPath>..\Libraries\InfiniteForgePacker.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
