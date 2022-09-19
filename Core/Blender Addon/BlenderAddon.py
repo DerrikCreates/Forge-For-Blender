@@ -66,7 +66,7 @@ def export_item_data(context, filepath):
 
     stringToSave = ""
     for jsonString in itemList:
-        stringToSave+=f",{jsonString} \n"
+        stringToSave+=f"{jsonString}"
 
 
     file = open(filepath,'w')
