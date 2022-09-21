@@ -55,7 +55,7 @@ def export_item_data(context, filepath):
             itemData.rotationY = rot.y
             itemData.rotationZ = rot.z
 
-            scale = evalObject.rotation_euler
+            scale = evalObject.scale
             itemData.scaleX = scale.x
             itemData.scaleY = scale.y
             itemData.scaleZ = scale.z
