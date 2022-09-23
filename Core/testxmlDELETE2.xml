@@ -1,0 +1,46 @@
+<struct>
+    <struct id="2">
+        <int32 id="0">1759788903</int32>
+    </struct>
+    <struct id="3">
+        <float id="0">-131.40001</float>
+        <float id="1">51</float>
+        <float id="2">14.400001</float>
+    </struct>
+    <struct id="4">
+        <float id="2">1</float>
+    </struct>
+    <struct id="5">
+        <float id="0">1</float>
+    </struct>
+    <uint8 id="7">1</uint8>
+    <struct id="8">
+        <list id="0" type="struct">
+            <struct>
+                <int32 id="1">2</int32>
+                <struct id="13" />
+            </struct>
+        </list>
+        <list id="1" type="struct">
+            <struct>
+                <list id="0" type="struct">
+                    <struct>
+                        <int32 id="0">0</int32>
+                    </struct>
+                </list>
+                <bool id="13">true</bool>
+            </struct>
+        </list>
+        <list id="24" type="struct">
+            <struct>
+                <int32 id="0">1</int32>
+                <struct id="1">
+                    <int32 id="0">-1847613636</int32>
+                </struct>
+                <int32 id="2">2</int32>
+            </struct>
+        </list>
+    </struct>
+    <struct id="9" />
+    <struct id="10" />
+</struct>

@@ -12,8 +12,12 @@ static class Program
 {
     public static Settings Settings;
 
+    public static readonly string EXEPath =
+        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
     public static readonly string SettingsPath =
-        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Settings/";
+        Path.GetDirectoryName(EXEPath + "/Settings/");
+
 
     /// <summary>
     ///  The main entry point for the application.

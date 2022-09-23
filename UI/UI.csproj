@@ -37,4 +37,10 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="testmap.mvar">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
