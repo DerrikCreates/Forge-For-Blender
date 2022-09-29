@@ -1,15 +1,21 @@
 using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using System.Xml.Linq;
+using Bond;
 using BondReader;
 using BondReader.Schemas;
+using BondReader.Schemas.Generic;
+using BondReader.Schemas.Items;
 using ForgeTools;
 using ForgeTools.Core;
 using InfiniteForgeConstants;
+using InfiniteForgeConstants.MapSettings;
 using InfiniteForgeConstants.ObjectSettings;
 using InfiniteForgePacker.XML;
+using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
-using Schemas;
 using Serilog;
 using Vector3 = System.Numerics.Vector3;
 
@@ -78,51 +84,57 @@ public partial class Form1 : Form
 
     private void Form1_Load(object sender, EventArgs e)
     {
-        DCMap.LoadMap(XDocument.Load(Program.EXEPath + "/DefaultStaticPrimitiveCube Variant 16x16x16.mvar.xml"));
+        // DCMap.LoadMap(XDocument.Load(Program.EXEPath + "/DefaultStaticPrimitiveCube Variant 16x16x16.mvar.xml"));
 
 
-        var map = BondHelper.ProcessFile<MapSchema>(Program.EXEPath + "/testmap.mvar");
+        // var bonded = InfiniteForgePacker.XML.  Bonded<BondSchema>
+
+        // var Bond = BondHelper.ProcessFile<IBonded<BondSchema>>(Program.EXEPath +
+        //                                                          "/testmap.mvar"); // new BondSchema(MapId.BEHEMOTH);
+        var map = new BondSchema();
+        // BondSchema m = new BondSchema();
+
+
         var random = new Random();
-        for (int i = 0; i < 6500; i++)
+        for (int i = 0; i < 1200; i++)
         {
-            var item = new Item();
+            var randonPos = new Vector3(
+                (-1389 + (random.Next(-25, 25))) / 10f,
+                (709 + (random.Next(-25, 25))) / 10f,
+                (100 + 250 + (random.Next(0, 25))) / 10f
+            );
 
-            item.Position.X = (-1238 + random.Next(-350, 350)) / 10f;
-            item.Position.Y = (537 + random.Next(-350, 350)) / 10f;
-            item.Position.Z = (100 + random.Next(-350, 350)) / 10f;
-            item.ItemId = new GenericIntStruct() { Int = (int)ObjectId.PRIMITIVE_BLOCK };
-            map.Items.AddFirst(item);
+            var randomRot = new Vector3(random.Next(-180, 180), random.Next(-180, 180), random.Next(-180, 180));
 
-            var trans = new Transform(Vector3.Zero,
-                new Vector3(random.Next(-180, 180), random.Next(-180, 180), random.Next(-180, 180)));
+            Transform transform = new Transform(randonPos, randomRot);
+
+            transform.PhysicsType = PhysicsType.NORMAL;
+            var go = new GameObject(transform: transform);
+
+            go.ObjectSettings ??= new AdditionalObjectSettings(-1847613636);
 
 
-            item.Forward.X = trans.DirectionVectors.Forward.X;
-            item.Forward.Y = trans.DirectionVectors.Forward.Y;
-            item.Forward.Z = trans.DirectionVectors.Forward.Z;
-
-            item.Up.X = trans.DirectionVectors.Up.X;
-            item.Up.Y = trans.DirectionVectors.Up.Y;
-            item.Up.Z = trans.DirectionVectors.Up.Z;
-
-            item.StaticDynamicFlagUnknown = (byte)21;
-            var variantSettings = new Item.UnknownVariantSettings
+            ObjectId[] sphereVariants = new[]
             {
-                StaticDynamicFlag = 2,
-                ScriptBrainFlag = 1
-            };
-            ItemSettingsContainer.ScaleList scale = new ItemSettingsContainer.ScaleList();
-            scale.ScaleContainer = new BondReader.Schemas.Vector3();
-            scale.ScaleContainer.X = (random.Next(2, 15) / 4f);
-            scale.ScaleContainer.Y = (random.Next(2, 15) / 4f);
-            scale.ScaleContainer.Z = (random.Next(2, 15) / 4f); 
-            item.SettingsContainer.Scalelist.AddFirst(scale);
- 
-            item.VariantSettingsList.AddFirst(variantSettings);
+                ObjectId.FUSION_COIL_PLASMA, ObjectId.FUSION_COIL_SHOCK, ObjectId.FUSION_COIL_KINETIC
+            }; //{ 329774963, -1868408199, 11784207, -192867617 };
+            var randonVariant = random.Next(0, 3);
+
+
+            go.Transform.IsStatic = false;
+            go.ObjectId = ObjectId.FUSION_COIL_PLASMA;
+            go.ObjectId = sphereVariants[randonVariant];
+
+
+            ItemSchema itemSchema = new ItemSchema(go);
+
+            itemSchema.SettingsContainer.Scale.RemoveFirst();
+            map.Items.AddLast(itemSchema);
         }
 
-        map.MapIdContainer.MapId.Id = (int)InfiniteForgeConstants.MapSettings.MapId.BEHEMOTH;
-        BondHelper.WriteBond(map, Program.EXEPath + "/testmapSaved22222222.mvar");
+        map.MapIdContainer.MapId.Int = (int)InfiniteForgeConstants.MapSettings.MapId.BEHEMOTH;
+        // BondHelper.WriteBond(map, Program.EXEPath + "/testmapSaved22222222.mvar");
+        BondHelper.WriteBond(map, "C:/Halo Infinite Insider/__cms__/rtx-new/variants/Test.mvar");
     }
 
     private void button2_Click(object sender, EventArgs e)
@@ -141,6 +153,7 @@ public partial class Form1 : Form
 
         if (fileDialog.ShowDialog() == DialogResult.OK)
         {
+            var mapObject = new Map(MapId.BEHEMOTH);
             var fileInfo = new FileInfo(fileDialog.FileName);
             Program.Settings.LastUsedPath = fileDialog.FileName;
             Log.Information(fileDialog.FileName);
@@ -148,50 +161,43 @@ public partial class Form1 : Form
 
             // var map = new Map();
 
-            var mapShell = XDocument.Load(Program.EXEPath + "/ExampleMap.xml");
-            var itemsContainer = XMLHelper.GetObjectList(mapShell);
+            //var mapShell = XDocument.Load(Program.EXEPath + "/ExampleMap.xml");
             string[] items = File.ReadAllText(fileInfo.FullName).Split("}", StringSplitOptions.RemoveEmptyEntries);
             foreach (var item in items)
             {
-                var itemShell = XDocument.Load(Program.EXEPath + "/ExampleStaticItem.xml").Root;
-
                 var i = item + "}";
-                var mapItem =
-                    XMLObject.GenerateObjectFromXML(XDocument.Load(Program.EXEPath + "/ExampleStaticItem.xml"));
+
 
                 var bItem = JsonConvert.DeserializeObject<BlenderItem>(i);
                 if (bItem == null)
                     continue;
+                GameObject go = new GameObject();
+                go.Transform.Position.X = bItem.PositionX + 1389;
+                go.Transform.Position.Y = bItem.PositionY + 709;
+                go.Transform.Position.Z = bItem.PositionZ + 100;
 
-                mapItem.GameObject.Transform.Position.X = bItem.PositionX;
-                mapItem.GameObject.Transform.Position.Y = bItem.PositionY;
-                mapItem.GameObject.Transform.Position.Z = bItem.PositionZ;
-
-                mapItem.GameObject.Transform.Scale.X = bItem.ScaleX / 4;
-                mapItem.GameObject.Transform.Scale.Y = bItem.ScaleY / 4;
-                mapItem.GameObject.Transform.Scale.Z = bItem.ScaleZ / 4;
-                mapItem.GameObject.Transform.IsStatic = true;
+                go.Transform.Scale.X = bItem.ScaleX / 4;
+                go.Transform.Scale.Y = bItem.ScaleY / 4;
+                go.Transform.Scale.Z = bItem.ScaleZ / 4;
+                go.Transform.IsStatic = true;
 
                 var rot = Vector3.Zero;
                 rot.X = bItem.RotationX;
                 rot.Y = bItem.RotationY;
                 rot.Z = bItem.RotationZ;
 
-                mapItem.GameObject.Transform.EulerRotation = rot;
+                go.Transform.EulerRotation = rot;
                 //mapItem.Transform.DirectionVectors
 
-                mapItem.GameObject.ObjectId = ObjectId.PRIMITIVE_BLOCK;
+                go.ObjectId = ObjectId.PRIMITIVE_BLOCK;
 
-
+                mapObject.GameObjects.Add(go);
                 //  XMLHelper.AddObject(mapShell, mapItem.GameObject);
-
-
-                mapItem.WriteObject(itemShell);
-
-                itemsContainer.Add(itemShell);
             }
 
-            mapShell.Save(Program.EXEPath + "/Test.xml");
+            BondSchema map = new BondSchema(mapObject);
+
+            BondHelper.WriteBond<BondSchema>(map, Program.EXEPath + "/BlenderMap.mvar");
             //mapShell.WriteTo(XmlWriter.Create(Program.EXEPath + "/Test.xml"));
         }
     }
