@@ -15,6 +15,17 @@ public class BlenderItem
     [JsonProperty("rotationX")] public float RotationX;
     [JsonProperty("rotationY")] public float RotationY;
     [JsonProperty("rotationZ")] public float RotationZ;
+    
+    [JsonProperty("forwardX")] public float ForwardX;
+    [JsonProperty("forwardY")] public float ForwardY;
+    [JsonProperty("forwardZ")] public float ForwardZ;
+
+    [JsonProperty("upX")] public float UpX;
+    [JsonProperty("upY")] public float UpY;
+    [JsonProperty("upZ")] public float UpZ;
+
+    
+    
 
     /*
     positionX = None
@@ -28,5 +39,15 @@ public class BlenderItem
     rotationX = None
     rotationY = None
     rotationZ = None
+    
+    
+    
+    forwardX = None
+    forwardY = None
+    forwardZ = None
+    
+    upX = None
+    upY = None
+    upZ = None
     */
 }

@@ -18,6 +18,53 @@ from bpy.props import StringProperty, BoolProperty, EnumProperty
 from bpy.types import Operator
 
 
+def export_point_cloud(context, filepath):
+    print("Collecting Forge Data...")
+
+    depsgraph = bpy.context.evaluated_depsgraph_get()  # Get ref to the evaulated "scene"?
+    objects = depsgraph.scene.objects  # get evaulated objects
+
+
+    activeObject = context.active_object;
+    activeObject = activeObject.evaluated_get(depsgraph)
+    verts = activeObject.data.vertices
+    itemList = []
+    for vert in verts:
+        print(vert.normal)
+
+        exportItem = ItemData()
+        pos = activeObject.matrix_world @ vert.co
+        exportItem.positionX = pos.x
+        exportItem.positionY = pos.y
+        exportItem.positionZ = pos.z
+
+        exportItem.scaleX = 0.5
+        exportItem.scaleY = 0.5
+        exportItem.scaleZ = 0.5
+
+        exportItem.rotationX = vert.normal.x
+        exportItem.rotationY = vert.normal.y
+        exportItem.rotationZ = vert.normal.z
+        print(exportItem)
+        itemList.append(exportItem.toJSON())
+
+
+
+    print("------")
+
+
+    stringToSave = ""
+    for jsonString in itemList:
+        stringToSave+=f"{jsonString}"
+
+
+
+    file = open(filepath,'w')
+
+    file.write(stringToSave)
+    print(f"File saved to {filepath}")
+    return {'FINISHED'}
+
 def export_item_data(context, filepath):
     print("Collecting Forge Data...")
 
@@ -59,7 +106,20 @@ def export_item_data(context, filepath):
             itemData.scaleX = scale.x
             itemData.scaleY = scale.y
             itemData.scaleZ = scale.z
+
+            forwardVector = evalObject.matrix_world.to_quaternion() @ Vector((0.0,1.0,0.0))
+            itemData.forwardX = forwardVector.x
+            itemData.forwardY = forwardVector.y
+            itemData.forwardZ = forwardVector.z
+
+            upVector = evalObject.matrix_world.to_quaternion() @ Vector((0.0,0.0,-1.0))
+            itemData.upX = upVector.x
+            itemData.upY = upVector.y
+            itemData.upz = upVector.z
+            
             itemList.append(itemData.toJSON())
+            
+            
 
         else:
             print(f"Skipping {object.name} because its not marked for export")
@@ -117,6 +177,14 @@ class ItemData:
     rotationX = None
     rotationY = None
     rotationZ = None
+
+    forwardX = None
+    forwardY = None
+    forwardZ = None
+
+    upX = None
+    upY = None
+    upZ = None
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,
