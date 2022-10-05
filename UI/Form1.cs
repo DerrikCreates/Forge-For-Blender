@@ -4,6 +4,9 @@ using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using System.Xml.Linq;
 using Bond;
+using Bond.IO.Unsafe;
+using Bond.Protocols;
+using Bond.Tag;
 using BondReader;
 using BondReader.Schemas;
 using BondReader.Schemas.Generic;
@@ -17,6 +20,8 @@ using InfiniteForgePacker.XML;
 using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using Serilog;
+using InputBuffer = Bond.IO.Safe.InputBuffer;
+using OutputBuffer = Bond.IO.Safe.OutputBuffer;
 using Vector3 = System.Numerics.Vector3;
 
 namespace DerriksForgeTools;
@@ -90,11 +95,84 @@ public partial class Form1 : Form
         // var bonded = InfiniteForgePacker.XML.  Bonded<BondSchema>
 
         // var Bond = BondHelper.ProcessFile<IBonded<BondSchema>>(Program.EXEPath +
-        //                                                          "/testmap.mvar"); // new BondSchema(MapId.BEHEMOTH);
-        var map = new BondSchema();
+        //"/testmap.mvar"); // new BondSchema(MapId.BEHEMOTH);
+
+        //var passThroughTest = BondHelper.ProcessFile<BondSchema>(Program.EXEPath + "/Guardian_Blockedout.mvar");
+        // IBonded<MvarSchema> testCast = new Bonded<MvarSchema>(new MvarSchema());
+
+        //BondHelper.WriteBond(testCast,Program.EXEPath + "/OUTPUTTEST.mvar");
+/*
+        var reader =
+            new CompactBinaryReader<InputBuffer>(
+                new InputBuffer(File.ReadAllBytes(Program.EXEPath + "/Guardian_Blockedout.mvar")), version: 2);
+        IBonded<MvarSchema> ibond = new Bonded<MvarSchema, CompactBinaryReader<InputBuffer>>(reader);
+        
+        
+       
+       
+        var xmlstream = new System.IO.MemoryStream();
+        var xmlwriter = new SimpleXmlWriter(xmlstream);
+
+        //var t = ibond.Deserialize();
+*/
+        //ibond.Serialize();
+        // StructDef def = new StructDef();
+        //  CompactBinaryReader<InputBuffer> read;
+        //read.ReadFieldBegin();
+        // SchemaDef sd = new SchemaDef();
+        //RuntimeSchema rs = new RuntimeSchema(ibond)
+/*
+        t.MapIdContainer.Deserialize().MapId.Int = 5555;
+        var b = t.MapIdContainer.Deserialize();
+        b.MapId.Int = 2222;
+
+        var output = new OutputBuffer();
+        var writer = new CompactBinaryWriter<OutputBuffer>(output, 2);
+        
+       // Transcode.FromTo(reader,xmlwriter);
+        //ibond.Serialize(writer);
+        Serialize.To(writer, ibond);
+        File.WriteAllBytes(Program.EXEPath + "/OUTPUTTEST.mvar", output.Data.ToArray());
+*/
+
+        //var test = BondHelper.ProcessFile<IBonded<BondSchema>>(Program.EXEPath + "/Guardian_Blockedout.mvar");
+        //var serializer = new Serializer<CompactBinaryWriter<OutputStream>>(typeof(MvarSchema));
+        //var deserializer = new Deserializer(,typeof(MvarSchema));
+
+        // .Deserialize()
+        // var bondedField = BondHelper.ProcessFile<IBonded<MvarSchema>>(Program.EXEPath + "/Guardian_Blockedout.mvar");
+        // var t2 = deserializer.Deserialize(bondedField);
+        // (new CompactBinaryReader<InputBuffer>(
+        //    new InputBuffer(File.ReadAllBytes(Program.EXEPath + "/Guardian_Blockedout.mvar")),version:2));
+        // bondedField.Deserialize().MapIdContainer.MapId.Int = 321321;
+        // bondedField.MapIdContainer.Serialize(writer);
+
+        //Serialize.To(writer, t2);
+
+        //output.Flush();
+        //fileStream.Flush();
+
+
+        // b.MapIdContainer.Deserialize();
+
+        //  var test = Deserialize<IBonded<BondSchema>>.From<InputBuffer>(input);
+
+        // Bonded<MvarSchema> t = new Bonded<MvarSchema>(new MvarSchema());
+
+        //var input = new Bond.IO.Unsafe.InputBuffer(output.Data);
+        // var reader = new CompactBinaryReader<InputBuffer>(input, 2);
+        // var obj = Deserialize<BondSchema>.From(reader);
+
+        // var schema = Schema.GetRuntimeSchema(typeof(SchemaDef));
+        //var runtime = new RuntimeSchema(schema);
+        //BondHelper.WriteBond(schema,Program.EXEPath+"/schemaDefTest");
+
+        //var fieldSchema = new RuntimeSchema(schema.StructDef);
+
+        // var map = new MvarSchema();
         // BondSchema m = new BondSchema();
 
-
+/*
         var random = new Random();
         for (int i = 0; i < 1200; i++)
         {
@@ -129,12 +207,14 @@ public partial class Form1 : Form
             ItemSchema itemSchema = new ItemSchema(go);
 
             itemSchema.SettingsContainer.Scale.RemoveFirst();
-            map.Items.AddLast(itemSchema);
+            // map.Items.AddLast(itemSchema);
         }
 
-        map.MapIdContainer.MapId.Int = (int)InfiniteForgeConstants.MapSettings.MapId.BEHEMOTH;
+        //  map.MapIdContainer.MapId.Int = (int)InfiniteForgeConstants.MapSettings.MapId.BEHEMOTH;
         // BondHelper.WriteBond(map, Program.EXEPath + "/testmapSaved22222222.mvar");
         BondHelper.WriteBond(map, "C:/Halo Infinite Insider/__cms__/rtx-new/variants/Test.mvar");
+        
+        */
     }
 
     private void button2_Click(object sender, EventArgs e)
@@ -153,7 +233,7 @@ public partial class Form1 : Form
 
         if (fileDialog.ShowDialog() == DialogResult.OK)
         {
-            var mapObject = new Map(MapId.BEHEMOTH);
+            var mapObject = new Map(MapId.CATALYST);
             var fileInfo = new FileInfo(fileDialog.FileName);
             Program.Settings.LastUsedPath = fileDialog.FileName;
             Log.Information(fileDialog.FileName);
@@ -171,33 +251,42 @@ public partial class Form1 : Form
                 var bItem = JsonConvert.DeserializeObject<BlenderItem>(i);
                 if (bItem == null)
                     continue;
-                GameObject go = new GameObject();
-                go.Transform.Position.X = bItem.PositionX + 1389;
-                go.Transform.Position.Y = bItem.PositionY + 709;
-                go.Transform.Position.Z = bItem.PositionZ + 100;
 
-                go.Transform.Scale.X = bItem.ScaleX / 4;
-                go.Transform.Scale.Y = bItem.ScaleY / 4;
-                go.Transform.Scale.Z = bItem.ScaleZ / 4;
+
+                var forward = new Vector3(bItem.ForwardX, bItem.ForwardY, bItem.ForwardZ);
+                var up = new Vector3(bItem.UpZ, bItem.UpY, bItem.UpX);
+
+
+                Transform t = new Transform(Vector3.Zero, (up, forward));
+                GameObject go = new GameObject(transform: t);
+
+
+                go.Transform.Position.X = (bItem.PositionX);// / 10f;
+                go.Transform.Position.Y = (bItem.PositionY);// / 10f;
+                go.Transform.Position.Z = (bItem.PositionZ); /// 10f;
+
+                go.Transform.Scale.X = bItem.ScaleX; /// 4f;
+                go.Transform.Scale.Y = bItem.ScaleY; /// 4f;
+                go.Transform.Scale.Z = bItem.ScaleZ;// / 4f;
                 go.Transform.IsStatic = true;
 
-                var rot = Vector3.Zero;
-                rot.X = bItem.RotationX;
-                rot.Y = bItem.RotationY;
-                rot.Z = bItem.RotationZ;
+                
 
-                go.Transform.EulerRotation = rot;
-                //mapItem.Transform.DirectionVectors
+                
 
-                go.ObjectId = ObjectId.PRIMITIVE_BLOCK;
+                   
+                
+
+                go.ObjectId = ObjectId.PRIMITIVE_CONE;
 
                 mapObject.GameObjects.Add(go);
                 //  XMLHelper.AddObject(mapShell, mapItem.GameObject);
             }
 
+
             BondSchema map = new BondSchema(mapObject);
 
-            BondHelper.WriteBond<BondSchema>(map, Program.EXEPath + "/BlenderMap.mvar");
+            BondHelper.WriteBond(map, Program.EXEPath + "/BlenderMap.mvar");
             //mapShell.WriteTo(XmlWriter.Create(Program.EXEPath + "/Test.xml"));
         }
     }
