@@ -14,8 +14,10 @@ bl_info = {
 import bpy
 import json
 from bpy_extras.io_utils import ExportHelper
+from mathutils import Vector
 from bpy.props import StringProperty, BoolProperty, EnumProperty
 from bpy.types import Operator
+
 
 
 def export_point_cloud(context, filepath):
@@ -185,6 +187,7 @@ class ItemData:
     upX = None
     upY = None
     upZ = None
+    
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -206,15 +209,33 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
         obj = context.object
 
         row = layout.row()
-        row.label(text="Hello world!", icon='WORLD_DATA')
+        row.label(text="Halo Forge Exporter Item Properites", icon='PROPERTIES')
 
         row = layout.row()
-        row.label(text="Active object is: " + obj.forge_test_prop)
+        #row.label(text="Active object is: " + obj.forge_test_prop)
         row = layout.row()
-        row.prop(obj, "forge_test_prop")
-        row.prop(obj, "forge_enum")
+        #row.prop(obj, "forge_test_prop")
+        #row.prop(obj, "forge_enum")
+        
         row.prop(obj, "forge_export_toggle")
+        
         row = layout.row()
+        row.label(text="DANGER ZONE! DO NOT CHANGE")
+        row = layout.row()
+        row.label(icon='ERROR')
+        row.label(icon='ERROR')
+        row.label(icon='ERROR')
+        row.label(icon='ERROR')
+        row.label(icon='ERROR')
+        row.label(icon='ERROR')
+        row.label(icon='ERROR')
+        row.label(icon='ERROR')
+        
+        
+        row = layout.row()
+        row.prop(obj, "forge_object_id")
+        row = layout.row()
+        row.prop(obj,"forge_object_variant_id")
     # row.operator("mesh.primitive_cube_add")
 
 
@@ -254,16 +275,26 @@ class ExportSomeData(Operator, ExportHelper): #panel for exporting data
 
     def execute(self, context):
         return export_item_data(context, self.filepath)
+    
+class ExportPointCloudData(Operator,ExportHelper):
+    """Export point cloud to Halo Forge"""
+    bl_idname = "halo_forge.save_point_cloud"  # important since its how bpy.ops.import_test.some_data is constructed
+    bl_label = "Export Halo Point Cloud"
+    filename_ext = ".DCjson"
+    def execute(self,context):
+        return export_point_cloud(context,self.filepath)
 
 
 # Only needed if you want to add into a dynamic menu
 def menu_func_export(self, context):
     self.layout.operator(ExportSomeData.bl_idname, text="Export Halo Forge Data")
+    self.layout.operator(ExportPointCloudData.bl_idname,text="Export Forge Point Cloud")
 
 
 # Register and add to the "file selector" menu (required to use F3 search "Text Export Operator" for quick access).
 def register():
     bpy.utils.register_class(ExportSomeData)
+    bpy.utils.register_class(ExportPointCloudData)
     bpy.utils.register_class(ForgeItemPropertiesPanel)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
 
@@ -277,6 +308,18 @@ def register():
         description="This enables this item to be saved when exporting",
         default=True,
 
+    )
+    
+    bpy.types.Object.forge_object_id = bpy.props.IntProperty(
+    
+    name="Object ID",
+        description="Do not change this unless you know what you are doing!",
+    )
+    
+    bpy.types.Object.forge_object_variant_id = bpy.props.IntProperty(
+    
+    name="Variant ID",
+        description="Do not change this unless you know what you are doing!",
     )
     bpy.types.Object.forge_enum = bpy.props.EnumProperty(
         name = "",
