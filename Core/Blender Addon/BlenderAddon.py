@@ -78,10 +78,25 @@ def export_item_data(context, filepath):
     mapData = MapData()
     
 
-
+    foundMapSettings = False
+    mapSettingsObject = None
     itemList = []
     print("------")
     for object in objects:
+        print(f"{object.forge_isMapSettings} map settings bool")
+        
+        if object.forge_isMapSettings == True:
+           
+            if foundMapSettings == True:
+                print(f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
+                
+                raise TypeError(f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
+                return
+            foundMapSettings = True
+            mapSettingsObject = object
+            
+            
+            
         if object.forge_export_toggle == True:
 
             itemData = ItemData()
@@ -126,8 +141,7 @@ def export_item_data(context, filepath):
             
             print(itemData.testList)
            
-            itemData.testList.append("test")
-            itemData.testList.append("test")
+            
             
             itemList.append(itemData.toJSON())
             
