@@ -217,7 +217,10 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
         #row.prop(obj, "forge_test_prop")
         #row.prop(obj, "forge_enum")
         
-        row.prop(obj, "forge_export_toggle")
+        row.prop(obj,'forge_export_toggle')
+        
+        self.layout.operator('halo_forge.dynamic_object_lock')
+        
         
         row = layout.row()
         row.label(text="DANGER ZONE! DO NOT CHANGE")
@@ -236,6 +239,7 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
         row.prop(obj, "forge_object_id")
         row = layout.row()
         row.prop(obj,"forge_object_variant_id")
+        
     # row.operator("mesh.primitive_cube_add")
 
 
@@ -285,6 +289,17 @@ class ExportPointCloudData(Operator,ExportHelper):
         return export_point_cloud(context,self.filepath)
 
 
+class DynamicObjectLock(bpy.types.Operator):
+    bl_idname = "halo_forge.dynamic_object_lock"
+    bl_label = "Make Object Dynamic"
+    def execute(self, context):
+        print(context)
+        return {'FINISHED'}
+
+
+
+
+
 # Only needed if you want to add into a dynamic menu
 def menu_func_export(self, context):
     self.layout.operator(ExportSomeData.bl_idname, text="Export Halo Forge Data")
@@ -296,6 +311,7 @@ def register():
     bpy.utils.register_class(ExportSomeData)
     bpy.utils.register_class(ExportPointCloudData)
     bpy.utils.register_class(ForgeItemPropertiesPanel)
+    bpy.utils.register_class(DynamicObjectLock)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
 
     #Properties
@@ -306,6 +322,12 @@ def register():
     bpy.types.Object.forge_export_toggle = bpy.props.BoolProperty(
         name="Export Item",
         description="This enables this item to be saved when exporting",
+        default=True,
+
+    )
+    bpy.types.Object.forge_isStatic = bpy.props.BoolProperty(
+        name="Is Static",
+        description="Says if this object is static or not",
         default=True,
 
     )
@@ -335,6 +357,7 @@ def register():
 def unregister():
     bpy.utils.unregister_class(ExportSomeData)
     bpy.utils.unregister_class(ForgeItemPropertiesPanel)
+    bpy.utils.unregister_class(DynamicObjectLock)
     bpy.types.TOPBAR_MT_file_export.remove(menu_func_export)
 
 
