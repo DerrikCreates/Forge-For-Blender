@@ -13,6 +13,7 @@ bl_info = {
 
 import bpy
 import json
+from typing import List
 from bpy_extras.io_utils import ExportHelper
 from mathutils import Vector
 from bpy.props import StringProperty, BoolProperty, EnumProperty
@@ -74,7 +75,8 @@ def export_item_data(context, filepath):
     objects = depsgraph.scene.objects  # get evaulated objects
 
 
-
+    mapData = MapData()
+    
 
 
     itemList = []
@@ -122,8 +124,15 @@ def export_item_data(context, filepath):
             print(evalObject.forge_object_id)
             itemData.itemId = evalObject.forge_object_id
             
+            print(itemData.testList)
+           
+            itemData.testList.append("test")
+            itemData.testList.append("test")
+            
             itemList.append(itemData.toJSON())
             
+            
+            mapData.itemList = itemList
             
 
         else:
@@ -136,8 +145,10 @@ def export_item_data(context, filepath):
 
     file = open(filepath,'w')
 
-    file.write(stringToSave)
+    file.write(mapData.toJSON())
     print(f"File saved to {filepath}")
+    
+   # print(mapData.itemList[0].toJSON())
     return {'FINISHED'}
 
     # THIS IS THE EXAMPLE ON GETING ATTRIBUTE DATA OUT OF NODE GRAPH 
@@ -170,7 +181,15 @@ def export_item_data(context, filepath):
 # print(bpy.data.objects["Cube.003"].modifiers["GeometryNodes"]["Output_3_attribute_name"])
 
 
+
+
 class ItemData:
+    
+    def __init__(self):
+        self.testList = []
+    
+    testList = None
+    
     positionX = None
     positionY = None
     positionZ = None
@@ -200,6 +219,23 @@ class ItemData:
 
 
 
+
+
+
+class MapData:
+    
+    
+    itemList:List[ItemData] = [] 
+    
+    
+         
+        
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
+    
+    
+
 class ForgeItemPropertiesPanel(bpy.types.Panel):
     """Creates a Panel in the Object properties window"""
     bl_label = "Forge Item Properties"
@@ -225,10 +261,15 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
         row.prop(obj,'forge_export_toggle')
         
         self.layout.operator('halo_forge.dynamic_object_lock')
-        
+        row = layout.row()
+        row.label(text="Map Settings (ONLY ONE OBJECT ALLOWED)", icon = 'PROPERTIES')
+        row = layout.row()
+        row.prop(obj,"forge_isMapSettings")
+        row = layout.row()
+        row.prop(obj,"forge_mapId_enum")
         
         row = layout.row()
-        row.label(text="DANGER ZONE! DO NOT CHANGE")
+        row.label(text="***DANGER ZONE!*** DO NOT CHANGE ANYTHING BELOW")
         row = layout.row()
         row.label(icon='ERROR')
         row.label(icon='ERROR')
@@ -244,6 +285,7 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
         row.prop(obj, "forge_object_id")
         row = layout.row()
         row.prop(obj,"forge_object_variant_id")
+        
         
     # row.operator("mesh.primitive_cube_add")
 
@@ -336,6 +378,38 @@ def register():
         default=True,
 
     )
+    
+    ### MAP SETTINGS
+    bpy.types.Object.forge_isMapSettings = bpy.props.BoolProperty(
+        name="Map Settings Object",
+        description="Only one should exist in a scene",
+        default=False,
+    
+    )
+    
+    bpy.types.Object.forge_mapId = bpy.props.IntProperty(
+    name="Map ID",
+    description="Halo Map ID. Only Works on THE map settings object",
+    )
+    
+    bpy.types.Object.forge_mapId_enum = bpy.props.EnumProperty(
+        name = "",
+        description="Map ID",
+        items= [
+            ('-1598071734',"AQUARIUS","Test 1 Tooltip desc"),
+            ('-1449092339',"BEHEMOTH","Test 2 Tooltip desc"),
+            ('847557134',"BREAKER","Test 3 Tooltip desc"),
+            ('-1044063363',"CATALYST","Test 3 Tooltip desc"),
+            ('-340635692',"FRAGMENTATION","Test 3 Tooltip desc"),
+            ('-2109972058',"HIGH_POWER","Test 3 Tooltip desc"),
+            ('-738424322',"LAUNCH_SITE","Test 3 Tooltip desc"),
+            ('1253388187',"LIVE_FIRE","Test 3 Tooltip desc"),
+            ('-687782121',"RECHARGE","Test 3 Tooltip desc"),
+            ('-785503777',"DEADLOCK","Test 3 Tooltip desc"),
+        ]
+    )
+    
+    ## MAP SETTINGS END
     
     bpy.types.Object.forge_object_id = bpy.props.IntProperty(
     
