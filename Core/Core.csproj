@@ -9,18 +9,6 @@
 
     <ItemGroup>
       <None Remove="InfiniteForgePacker.dll" />
-      <None Update="ExampleStaticItem.xml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="ExampleMap.xml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="DefaultStaticPrimitiveCube Variant 16x16x16.mvar.xml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Guardian_Blockedout.mvar">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
     <ItemGroup>
