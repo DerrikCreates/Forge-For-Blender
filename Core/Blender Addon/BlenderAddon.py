@@ -119,6 +119,9 @@ def export_item_data(context, filepath):
             itemData.upY = upVector.y
             itemData.upz = upVector.z
             
+            print(evalObject.forge_object_id)
+            itemData.itemId = evalObject.forge_object_id
+            
             itemList.append(itemData.toJSON())
             
             
@@ -187,6 +190,8 @@ class ItemData:
     upX = None
     upY = None
     upZ = None
+    
+    itemId = None
     
 
     def toJSON(self):
