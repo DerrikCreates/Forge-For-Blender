@@ -145,7 +145,7 @@ def export_item_data(context, filepath):
            
             
             
-            itemList.append(itemData.toJSON())
+            itemList.append(itemData)
             
             
             mapData.itemList = itemList
@@ -230,9 +230,9 @@ class ItemData:
     itemId = None
     
 
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
+    #def toJSON(self):
+    #    return json.dumps(self, default=lambda o: o.__dict__,
+     #                     sort_keys=True, indent=4)
 
 
 
@@ -251,7 +251,7 @@ class MapData:
         
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
+                          sort_keys=True, indent=None)
     
     
 
