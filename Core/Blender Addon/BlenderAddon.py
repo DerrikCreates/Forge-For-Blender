@@ -121,7 +121,12 @@ def export_item_data(context, filepath):
             itemData.rotationY = rot.y
             itemData.rotationZ = rot.z
 
-            scale = evalObject.dimensions
+
+            if evalObject.forge_use_dimensions_toggle:
+                scale = evalObject.dimensions
+                else:
+                    scale = evalObject.scale
+            
             itemData.scaleX = scale.x
             itemData.scaleY = scale.y
             itemData.scaleZ = scale.z
