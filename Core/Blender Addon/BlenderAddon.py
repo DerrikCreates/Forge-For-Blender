@@ -124,14 +124,14 @@ def export_item_data(context, filepath):
 
             if evalObject.forge_use_dimensions_toggle:
                 scale = evalObject.dimensions
-                else:
+            else:
                     scale = evalObject.scale
             
             itemData.scaleX = scale.x
             itemData.scaleY = scale.y
             itemData.scaleZ = scale.z
 
-            forwardVector = evalObject.matrix_world.to_quaternion() @ Vector((-1.0,0.0,0.0)) ##1 1   -1 1   -1 -1   1 -1
+            forwardVector = evalObject.matrix_world.to_quaternion() @ Vector((1.0,0.0,0.0)) ##1 1   -1 1   -1 -1   1 -1
             forwardVector = forwardVector.normalized()
             itemData.forwardX = forwardVector.x
             itemData.forwardY = forwardVector.y
