@@ -126,12 +126,14 @@ def export_item_data(context, filepath):
             itemData.scaleY = scale.y
             itemData.scaleZ = scale.z
 
-            forwardVector = evalObject.matrix_world.to_quaternion() @ Vector((0.0,1.0,0.0))
+            forwardVector = evalObject.matrix_world.to_quaternion() @ Vector((-1.0,0.0,0.0)) ##1 1   -1 1   -1 -1   1 -1
+            forwardVector = forwardVector.normalized()
             itemData.forwardX = forwardVector.x
             itemData.forwardY = forwardVector.y
             itemData.forwardZ = forwardVector.z
 
-            upVector = evalObject.matrix_world.to_quaternion() @ Vector((0.0,0.0,-1.0))
+            upVector = evalObject.matrix_world.to_quaternion() @ Vector((0.0,0.0,1.0))##-1.0))
+            upVector = upVector.normalized()
             itemData.upX = upVector.x
             itemData.upY = upVector.y
             itemData.upz = upVector.z
