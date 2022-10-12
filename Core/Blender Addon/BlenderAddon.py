@@ -304,6 +304,8 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
         row.prop(obj, "forge_object_id")
         row = layout.row()
         row.prop(obj,"forge_object_variant_id")
+        row = layout.row()
+        row.prop(obj,"forge_use_dimensions_toggle")
         
         
     # row.operator("mesh.primitive_cube_add")
@@ -388,6 +390,12 @@ def register():
     bpy.types.Object.forge_export_toggle = bpy.props.BoolProperty(
         name="Export Item",
         description="This enables this item to be saved when exporting",
+        default=True,
+
+    )
+    bpy.types.Object.forge_use_dimensions_toggle = bpy.props.BoolProperty(
+        name="Export Dimension",
+        description="Exports dimensions instead of scale",
         default=True,
 
     )
