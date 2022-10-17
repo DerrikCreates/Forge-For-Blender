@@ -401,7 +401,7 @@ def register():
     bpy.types.Object.forge_use_dimensions_toggle = bpy.props.BoolProperty(
         name="Export Dimension",
         description="Exports dimensions instead of scale",
-        default=True,
+        default=False,
 
     )
     bpy.types.Object.forge_isStatic = bpy.props.BoolProperty(
