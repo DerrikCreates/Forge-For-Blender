@@ -17,14 +17,16 @@ public static class BlenderData
     public static void ProcessAndSave(string dataPath, string outputPath)
     {
         
-        var mapObject = new Map(MapId.CATALYST); //todo read map id from blender
-        BondSchema map = new BondSchema(mapObject);
-        var fileInfo = new FileInfo(dataPath);
+        
 
         Log.Information("Saving Mvar to {OutputPath}", outputPath);
 
         var jsonString = File.ReadAllText(dataPath);
         var blenderMap = JsonConvert.DeserializeObject<BlenderMap>(jsonString);
+        
+        var mapObject = new Map((MapId)blenderMap.MapId); //todo read map id from blender
+        BondSchema map = new BondSchema(mapObject);
+        var fileInfo = new FileInfo(dataPath);
         // var map = new Map();
 
 
@@ -67,6 +69,7 @@ public static class BlenderData
             go.ObjectId = (ObjectId)blenderItem.ItemId;
 
             
+           
             ItemSchema itemSchema = new ItemSchema(go);
             itemSchema.Forward = new BondReader.Schemas.Generic.Vector3(blenderItem.ForwardX, blenderItem.ForwardY, blenderItem.ForwardZ);
             itemSchema.Up = new BondReader.Schemas.Generic.Vector3(blenderItem.UpX, blenderItem.UpY, blenderItem.UpZ);
