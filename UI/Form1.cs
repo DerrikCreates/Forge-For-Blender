@@ -87,8 +87,11 @@ public partial class Form1 : Form
         }
     }
 
+
     private void Form1_Load(object sender, EventArgs e)
     {
+        
+
         // DCMap.LoadMap(XDocument.Load(Program.EXEPath + "/DefaultStaticPrimitiveCube Variant 16x16x16.mvar.xml"));
 
 
@@ -101,39 +104,39 @@ public partial class Form1 : Form
         // IBonded<MvarSchema> testCast = new Bonded<MvarSchema>(new MvarSchema());
 
         //BondHelper.WriteBond(testCast,Program.EXEPath + "/OUTPUTTEST.mvar");
-/*
-        var reader =
-            new CompactBinaryReader<InputBuffer>(
-                new InputBuffer(File.ReadAllBytes(Program.EXEPath + "/Guardian_Blockedout.mvar")), version: 2);
-        IBonded<MvarSchema> ibond = new Bonded<MvarSchema, CompactBinaryReader<InputBuffer>>(reader);
-        
-        
-       
-       
-        var xmlstream = new System.IO.MemoryStream();
-        var xmlwriter = new SimpleXmlWriter(xmlstream);
+        /*
+                var reader =
+                    new CompactBinaryReader<InputBuffer>(
+                        new InputBuffer(File.ReadAllBytes(Program.EXEPath + "/Guardian_Blockedout.mvar")), version: 2);
+                IBonded<MvarSchema> ibond = new Bonded<MvarSchema, CompactBinaryReader<InputBuffer>>(reader);
 
-        //var t = ibond.Deserialize();
-*/
+
+
+
+                var xmlstream = new System.IO.MemoryStream();
+                var xmlwriter = new SimpleXmlWriter(xmlstream);
+
+                //var t = ibond.Deserialize();
+        */
         //ibond.Serialize();
         // StructDef def = new StructDef();
         //  CompactBinaryReader<InputBuffer> read;
         //read.ReadFieldBegin();
         // SchemaDef sd = new SchemaDef();
         //RuntimeSchema rs = new RuntimeSchema(ibond)
-/*
-        t.MapIdContainer.Deserialize().MapId.Int = 5555;
-        var b = t.MapIdContainer.Deserialize();
-        b.MapId.Int = 2222;
+        /*
+                t.MapIdContainer.Deserialize().MapId.Int = 5555;
+                var b = t.MapIdContainer.Deserialize();
+                b.MapId.Int = 2222;
 
-        var output = new OutputBuffer();
-        var writer = new CompactBinaryWriter<OutputBuffer>(output, 2);
-        
-       // Transcode.FromTo(reader,xmlwriter);
-        //ibond.Serialize(writer);
-        Serialize.To(writer, ibond);
-        File.WriteAllBytes(Program.EXEPath + "/OUTPUTTEST.mvar", output.Data.ToArray());
-*/
+                var output = new OutputBuffer();
+                var writer = new CompactBinaryWriter<OutputBuffer>(output, 2);
+
+               // Transcode.FromTo(reader,xmlwriter);
+                //ibond.Serialize(writer);
+                Serialize.To(writer, ibond);
+                File.WriteAllBytes(Program.EXEPath + "/OUTPUTTEST.mvar", output.Data.ToArray());
+        */
 
         //var test = BondHelper.ProcessFile<IBonded<BondSchema>>(Program.EXEPath + "/Guardian_Blockedout.mvar");
         //var serializer = new Serializer<CompactBinaryWriter<OutputStream>>(typeof(MvarSchema));
@@ -172,49 +175,49 @@ public partial class Form1 : Form
         // var map = new MvarSchema();
         // BondSchema m = new BondSchema();
 
-/*
-        var random = new Random();
-        for (int i = 0; i < 1200; i++)
-        {
-            var randonPos = new Vector3(
-                (-1389 + (random.Next(-25, 25))) / 10f,
-                (709 + (random.Next(-25, 25))) / 10f,
-                (100 + 250 + (random.Next(0, 25))) / 10f
-            );
+        /*
+                var random = new Random();
+                for (int i = 0; i < 1200; i++)
+                {
+                    var randonPos = new Vector3(
+                        (-1389 + (random.Next(-25, 25))) / 10f,
+                        (709 + (random.Next(-25, 25))) / 10f,
+                        (100 + 250 + (random.Next(0, 25))) / 10f
+                    );
 
-            var randomRot = new Vector3(random.Next(-180, 180), random.Next(-180, 180), random.Next(-180, 180));
+                    var randomRot = new Vector3(random.Next(-180, 180), random.Next(-180, 180), random.Next(-180, 180));
 
-            Transform transform = new Transform(randonPos, randomRot);
+                    Transform transform = new Transform(randonPos, randomRot);
 
-            transform.PhysicsType = PhysicsType.NORMAL;
-            var go = new GameObject(transform: transform);
+                    transform.PhysicsType = PhysicsType.NORMAL;
+                    var go = new GameObject(transform: transform);
 
-            go.ObjectSettings ??= new AdditionalObjectSettings(-1847613636);
-
-
-            ObjectId[] sphereVariants = new[]
-            {
-                ObjectId.FUSION_COIL_PLASMA, ObjectId.FUSION_COIL_SHOCK, ObjectId.FUSION_COIL_KINETIC
-            }; //{ 329774963, -1868408199, 11784207, -192867617 };
-            var randonVariant = random.Next(0, 3);
+                    go.ObjectSettings ??= new AdditionalObjectSettings(-1847613636);
 
 
-            go.Transform.IsStatic = false;
-            go.ObjectId = ObjectId.FUSION_COIL_PLASMA;
-            go.ObjectId = sphereVariants[randonVariant];
+                    ObjectId[] sphereVariants = new[]
+                    {
+                        ObjectId.FUSION_COIL_PLASMA, ObjectId.FUSION_COIL_SHOCK, ObjectId.FUSION_COIL_KINETIC
+                    }; //{ 329774963, -1868408199, 11784207, -192867617 };
+                    var randonVariant = random.Next(0, 3);
 
 
-            ItemSchema itemSchema = new ItemSchema(go);
+                    go.Transform.IsStatic = false;
+                    go.ObjectId = ObjectId.FUSION_COIL_PLASMA;
+                    go.ObjectId = sphereVariants[randonVariant];
 
-            itemSchema.SettingsContainer.Scale.RemoveFirst();
-            // map.Items.AddLast(itemSchema);
-        }
 
-        //  map.MapIdContainer.MapId.Int = (int)InfiniteForgeConstants.MapSettings.MapId.BEHEMOTH;
-        // BondHelper.WriteBond(map, Program.EXEPath + "/testmapSaved22222222.mvar");
-        BondHelper.WriteBond(map, "C:/Halo Infinite Insider/__cms__/rtx-new/variants/Test.mvar");
-        
-        */
+                    ItemSchema itemSchema = new ItemSchema(go);
+
+                    itemSchema.SettingsContainer.Scale.RemoveFirst();
+                    // map.Items.AddLast(itemSchema);
+                }
+
+                //  map.MapIdContainer.MapId.Int = (int)InfiniteForgeConstants.MapSettings.MapId.BEHEMOTH;
+                // BondHelper.WriteBond(map, Program.EXEPath + "/testmapSaved22222222.mvar");
+                BondHelper.WriteBond(map, "C:/Halo Infinite Insider/__cms__/rtx-new/variants/Test.mvar");
+
+                */
     }
 
     private void button2_Click(object sender, EventArgs e)
@@ -233,7 +236,13 @@ public partial class Form1 : Form
 
         if (fileDialog.ShowDialog() == DialogResult.OK)
         {
-            BlenderData.ProcessAndSave(fileDialog.FileName, Program.EXEPath + "/");
+            BlenderData.ProcessAndSave(fileDialog.FileName, "C:/Halo Infinite Insider/__cms__/rtx-new/variants/");
         }
+    }
+
+    private void button_variantIdWatcher_Click(object sender, EventArgs e)
+    {
+        VariantIdReaderUtility.StartWatcher(textBox_variantIdWatcherPath.Text);
+
     }
 }

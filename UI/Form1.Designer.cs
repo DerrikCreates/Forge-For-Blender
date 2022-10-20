@@ -39,6 +39,8 @@ partial class Form1
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button_LoadBlenderJson = new System.Windows.Forms.Button();
+            this.button_variantIdWatcher = new System.Windows.Forms.Button();
+            this.textBox_variantIdWatcherPath = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -141,11 +143,31 @@ partial class Form1
             this.button_LoadBlenderJson.UseVisualStyleBackColor = true;
             this.button_LoadBlenderJson.Click += new System.EventHandler(this.button_LoadBlenderJson_Click);
             // 
+            // button_variantIdWatcher
+            // 
+            this.button_variantIdWatcher.Location = new System.Drawing.Point(674, 12);
+            this.button_variantIdWatcher.Name = "button_variantIdWatcher";
+            this.button_variantIdWatcher.Size = new System.Drawing.Size(114, 23);
+            this.button_variantIdWatcher.TabIndex = 7;
+            this.button_variantIdWatcher.Text = "VariantId Watcher";
+            this.button_variantIdWatcher.UseVisualStyleBackColor = true;
+            this.button_variantIdWatcher.Click += new System.EventHandler(this.button_variantIdWatcher_Click);
+            // 
+            // textBox_variantIdWatcherPath
+            // 
+            this.textBox_variantIdWatcherPath.Location = new System.Drawing.Point(674, 35);
+            this.textBox_variantIdWatcherPath.Name = "textBox_variantIdWatcherPath";
+            this.textBox_variantIdWatcherPath.Size = new System.Drawing.Size(114, 23);
+            this.textBox_variantIdWatcherPath.TabIndex = 8;
+            this.textBox_variantIdWatcherPath.Text = "C:\\Halo Infinite Insider\\__cms__\\rtx-new\\variants\\";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textBox_variantIdWatcherPath);
+            this.Controls.Add(this.button_variantIdWatcher);
             this.Controls.Add(this.button_LoadBlenderJson);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label_ActiveFilePath);
@@ -159,6 +181,7 @@ partial class Form1
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
     }
 
@@ -175,4 +198,6 @@ partial class Form1
     private Label label_MapName;
     private Label label2;
     private Button button_LoadBlenderJson;
+    private Button button_variantIdWatcher;
+    private TextBox textBox_variantIdWatcherPath;
 }
