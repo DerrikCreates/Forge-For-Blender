@@ -24,8 +24,10 @@ public class BlenderItem
     [JsonProperty("upY")] public float UpY;
     [JsonProperty("upZ")] public float UpZ;
 
-    
-    
+    [JsonProperty("itemId")] public int ItemId;
+
+
+
 
     /*
     positionX = None
