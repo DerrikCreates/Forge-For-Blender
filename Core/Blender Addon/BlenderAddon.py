@@ -369,7 +369,12 @@ class DynamicObjectLock(bpy.types.Operator):
         print(context)
         return {'FINISHED'}
 
-
+class ExportItemToForge(bpy.types.Operator):
+    bl_idname = "halo_forge.export_item_to_forge"  # important since its how bpy.ops.import_test.some_data is constructed
+    bl_label = "Export Item To Forge"
+    
+    def execute(self,context):
+        print("ExportItemToForge Operator ran")
 
 
 
@@ -385,6 +390,7 @@ def register():
     bpy.utils.register_class(ExportPointCloudData)
     bpy.utils.register_class(ForgeItemPropertiesPanel)
     bpy.utils.register_class(DynamicObjectLock)
+    bpy.utils.register_class(ExportItemToForge)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
 
     #Properties
