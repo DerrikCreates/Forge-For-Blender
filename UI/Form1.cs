@@ -29,14 +29,28 @@ namespace DerriksForgeTools;
 public partial class Form1 : Form
 {
     private Dictionary<Button, string> fileButtons = new Dictionary<Button, string>();
+    private string fullMvarSavePath;
+    private string _mvarName;
+    private string _exportDir = Program.EXEPath;
+
+
 
     public Form1()
     {
+
         InitializeComponent();
+
+        textBox_MvarName.Text = "Test";
     }
 
-    private string _activeFile;
 
+
+    private void UpdateExportPath()
+    {
+        fullMvarSavePath = $"{_exportDir}/{_mvarName}.mvar";
+
+        label_ExportPath.Text = fullMvarSavePath;
+    }
     private void OnFileButtonClick(object? sender, EventArgs e)
     {
         var path = fileButtons[(Button)sender];
@@ -49,48 +63,14 @@ public partial class Form1 : Form
         Log.Debug("display map data method {XMLPath}", xmlPath);
     }
 
-    private void AddFileToButtonLayout(FileInfo path)
-    {
-        if (fileButtons.ContainsValue(path.FullName) == false)
-        {
-            var b = new Button();
-            b.Text = path.Name;
-            FileListLayoutPanel.Controls.Add(b);
-            fileButtons.Add(b, path.FullName);
-            b.Click += OnFileButtonClick;
-        }
-    }
 
 
-    private void button1_Click(object sender, EventArgs e)
-    {
-        OpenFileDialog fileDialog = new OpenFileDialog();
-        fileDialog.InitialDirectory = Program.Settings.LastUsedPath;
-        fileDialog.Filter = "xml files (*.xml)|*.xml";
-
-        if (fileDialog.ShowDialog() == DialogResult.OK)
-        {
-            var fileInfo = new FileInfo(fileDialog.FileName);
-            Program.Settings.LastUsedPath = fileDialog.FileName;
-            Log.Information(fileDialog.FileName);
-            AddFileToButtonLayout(fileInfo);
-
-            var obj = XMLObject.GenerateObjectFromXML
-                (XElement.Load(Program.EXEPath + "/ExampleStaticItem.xml"));
-
-            //XMLMap.WriteMap();
-
-            var userMap = XMLMap.GenerateMapFromXML(XDocument.Load(fileInfo.FullName));
 
 
-            label_MapName.Text = userMap.Map.MapId.ToString();
-        }
-    }
 
 
     private void Form1_Load(object sender, EventArgs e)
     {
-        
 
         // DCMap.LoadMap(XDocument.Load(Program.EXEPath + "/DefaultStaticPrimitiveCube Variant 16x16x16.mvar.xml"));
 
@@ -222,6 +202,16 @@ public partial class Form1 : Form
 
     private void button2_Click(object sender, EventArgs e)
     {
+        OpenFileDialog fileDialog = new OpenFileDialog();
+        fileDialog.InitialDirectory = Program.Settings.LastUsedPath;
+        fileDialog.Filter = "Blender Export files (*.DCjson)|*.DCjson";
+
+        if (fileDialog.ShowDialog() == DialogResult.OK)
+        {
+            //BlenderData.ProcessAndSave(fileDialog.FileName, "C:/Halo Infinite Insider/__cms__/rtx-new/variants/");
+
+
+        }
     }
 
     private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -233,16 +223,45 @@ public partial class Form1 : Form
         OpenFileDialog fileDialog = new OpenFileDialog();
         fileDialog.InitialDirectory = Program.Settings.LastUsedPath;
         fileDialog.Filter = "Blender Export files (*.DCjson)|*.DCjson";
-
+        fileDialog.Title = "Select Exported Blender Map Data";
         if (fileDialog.ShowDialog() == DialogResult.OK)
         {
-            BlenderData.ProcessAndSave(fileDialog.FileName, "C:/Halo Infinite Insider/__cms__/rtx-new/variants/");
+            BlenderData.ProcessAndSave(fileDialog.FileName, _exportDir, _mvarName);
         }
     }
 
-    private void button_variantIdWatcher_Click(object sender, EventArgs e)
+    private void label1_Click(object sender, EventArgs e)
     {
-        VariantIdReaderUtility.StartWatcher(textBox_variantIdWatcherPath.Text);
+
+    }
+
+    private void button1_Click(object sender, EventArgs e) // set save location
+    {
+        FolderBrowserDialog fileDialog = new FolderBrowserDialog();
+        fileDialog.InitialDirectory = Program.Settings.LastUsedPath; //todo pretty sure this is broken
+
+
+        if (fileDialog.ShowDialog() == DialogResult.OK)
+        {
+            _exportDir = fileDialog.SelectedPath;
+            UpdateExportPath();
+        }
+    }
+
+    private void textBox_MvarName_TextChanged(object sender, EventArgs e)
+    {
+        _mvarName = textBox_MvarName.Text;
+        UpdateExportPath();
+    }
+
+    AboutForm about = new AboutForm();
+    private void button2_Click_1(object sender, EventArgs e)
+    {
+        if (about.IsDisposed)
+        {
+            var about = new AboutForm();
+        }
+        about.ShowDialog();
 
     }
 }

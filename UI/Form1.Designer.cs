@@ -29,157 +29,101 @@ partial class Form1
     /// </summary>
     private void InitializeComponent()
     {
-            this.button1 = new System.Windows.Forms.Button();
-            this.FileListLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.button2 = new System.Windows.Forms.Button();
-            this.label_ActiveFilePath = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label_MapName = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.button_LoadBlenderJson = new System.Windows.Forms.Button();
-            this.button_variantIdWatcher = new System.Windows.Forms.Button();
-            this.textBox_variantIdWatcherPath = new System.Windows.Forms.TextBox();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBox_MvarName = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label_ExportPath = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(12, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(162, 55);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Choose folder with xml map files";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // FileListLayoutPanel
-            // 
-            this.FileListLayoutPanel.Location = new System.Drawing.Point(12, 73);
-            this.FileListLayoutPanel.Name = "FileListLayoutPanel";
-            this.FileListLayoutPanel.Size = new System.Drawing.Size(162, 365);
-            this.FileListLayoutPanel.TabIndex = 1;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(182, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(88, 55);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Test Button";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // label_ActiveFilePath
-            // 
-            this.label_ActiveFilePath.Location = new System.Drawing.Point(276, 21);
-            this.label_ActiveFilePath.Name = "label_ActiveFilePath";
-            this.label_ActiveFilePath.Size = new System.Drawing.Size(512, 21);
-            this.label_ActiveFilePath.TabIndex = 4;
-            this.label_ActiveFilePath.Text = "file path and name";
-            this.label_ActiveFilePath.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Location = new System.Drawing.Point(276, 73);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(512, 365);
-            this.groupBox1.TabIndex = 5;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Map Info";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.label_MapName);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Location = new System.Drawing.Point(6, 22);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(149, 55);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            // 
-            // label_MapName
-            // 
-            this.label_MapName.BackColor = System.Drawing.Color.Transparent;
-            this.label_MapName.Location = new System.Drawing.Point(52, 19);
-            this.label_MapName.Name = "label_MapName";
-            this.label_MapName.Size = new System.Drawing.Size(97, 33);
-            this.label_MapName.TabIndex = 1;
-            this.label_MapName.Text = "Map Name";
-            this.label_MapName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label2
-            // 
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(6, 19);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 33);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Map:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Location = new System.Drawing.Point(276, 42);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(512, 28);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Loaded Map Data";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button_LoadBlenderJson
             // 
-            this.button_LoadBlenderJson.Location = new System.Drawing.Point(276, 12);
+            this.button_LoadBlenderJson.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(71)))), ((int)(((byte)(90)))));
+            this.button_LoadBlenderJson.FlatAppearance.BorderSize = 0;
+            this.button_LoadBlenderJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_LoadBlenderJson.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button_LoadBlenderJson.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
+            this.button_LoadBlenderJson.Location = new System.Drawing.Point(12, 8);
             this.button_LoadBlenderJson.Name = "button_LoadBlenderJson";
-            this.button_LoadBlenderJson.Size = new System.Drawing.Size(95, 55);
+            this.button_LoadBlenderJson.Size = new System.Drawing.Size(276, 53);
             this.button_LoadBlenderJson.TabIndex = 6;
-            this.button_LoadBlenderJson.Text = "Load Blender Json";
-            this.button_LoadBlenderJson.UseVisualStyleBackColor = true;
+            this.button_LoadBlenderJson.Text = "Create mvar";
+            this.button_LoadBlenderJson.UseVisualStyleBackColor = false;
             this.button_LoadBlenderJson.Click += new System.EventHandler(this.button_LoadBlenderJson_Click);
             // 
-            // button_variantIdWatcher
+            // button1
             // 
-            this.button_variantIdWatcher.Location = new System.Drawing.Point(674, 12);
-            this.button_variantIdWatcher.Name = "button_variantIdWatcher";
-            this.button_variantIdWatcher.Size = new System.Drawing.Size(114, 23);
-            this.button_variantIdWatcher.TabIndex = 7;
-            this.button_variantIdWatcher.Text = "VariantId Watcher";
-            this.button_variantIdWatcher.UseVisualStyleBackColor = true;
-            this.button_variantIdWatcher.Click += new System.EventHandler(this.button_variantIdWatcher_Click);
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(71)))), ((int)(((byte)(90)))));
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
+            this.button1.Location = new System.Drawing.Point(294, 8);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(84, 53);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Set Save Location";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBox_variantIdWatcherPath
+            // textBox_MvarName
             // 
-            this.textBox_variantIdWatcherPath.Location = new System.Drawing.Point(674, 35);
-            this.textBox_variantIdWatcherPath.Name = "textBox_variantIdWatcherPath";
-            this.textBox_variantIdWatcherPath.Size = new System.Drawing.Size(114, 23);
-            this.textBox_variantIdWatcherPath.TabIndex = 8;
-            this.textBox_variantIdWatcherPath.Text = "C:\\Halo Infinite Insider\\__cms__\\rtx-new\\variants\\";
+            this.textBox_MvarName.Location = new System.Drawing.Point(89, 67);
+            this.textBox_MvarName.Name = "textBox_MvarName";
+            this.textBox_MvarName.Size = new System.Drawing.Size(100, 23);
+            this.textBox_MvarName.TabIndex = 8;
+            this.textBox_MvarName.TextChanged += new System.EventHandler(this.textBox_MvarName_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
+            this.label1.Location = new System.Drawing.Point(10, 70);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 15);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "mvar name:";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // label_ExportPath
+            // 
+            this.label_ExportPath.AutoSize = true;
+            this.label_ExportPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label_ExportPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
+            this.label_ExportPath.Location = new System.Drawing.Point(12, 99);
+            this.label_ExportPath.Name = "label_ExportPath";
+            this.label_ExportPath.Size = new System.Drawing.Size(192, 15);
+            this.label_ExportPath.TabIndex = 10;
+            this.label_ExportPath.Text = "C://test/test/test/test/Text.mvar";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(8, 117);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 11;
+            this.button2.Text = "About";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.textBox_variantIdWatcherPath);
-            this.Controls.Add(this.button_variantIdWatcher);
-            this.Controls.Add(this.button_LoadBlenderJson);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.label_ActiveFilePath);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
+            this.ClientSize = new System.Drawing.Size(390, 145);
             this.Controls.Add(this.button2);
+            this.Controls.Add(this.label_ExportPath);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.FileListLayoutPanel);
+            this.Controls.Add(this.textBox_MvarName);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.button_LoadBlenderJson);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Text = "Blender To Forge Converter";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -188,16 +132,10 @@ partial class Form1
     #endregion
 
     private OpenFileDialog openFileDialog1;
-    private Button button1;
-    private FlowLayoutPanel FileListLayoutPanel;
-    private Button button2;
-    private Label label_ActiveFilePath;
-    private GroupBox groupBox1;
-    private Label label1;
-    private GroupBox groupBox2;
-    private Label label_MapName;
-    private Label label2;
     private Button button_LoadBlenderJson;
-    private Button button_variantIdWatcher;
-    private TextBox textBox_variantIdWatcherPath;
+    private Button button1;
+    private TextBox textBox_MvarName;
+    private Label label1;
+    private Label label_ExportPath;
+    private Button button2;
 }

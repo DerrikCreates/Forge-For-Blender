@@ -14,16 +14,13 @@ namespace ForgeTools.Core;
 
 public static class BlenderData
 {
-    public static void ProcessAndSave(string dataPath, string outputPath)
+    public static void ProcessAndSave(string dataPath, string outputPath, string fileName)
     {
-        
-        
-
         Log.Information("Saving Mvar to {OutputPath}", outputPath);
 
         var jsonString = File.ReadAllText(dataPath);
         var blenderMap = JsonConvert.DeserializeObject<BlenderMap>(jsonString);
-        
+
         var mapObject = new Map((MapId)blenderMap.MapId); //todo read map id from blender
         BondSchema map = new BondSchema(mapObject);
         var fileInfo = new FileInfo(dataPath);
@@ -34,8 +31,7 @@ public static class BlenderData
         string[] items = File.ReadAllText(fileInfo.FullName).Split("}", StringSplitOptions.RemoveEmptyEntries);
         foreach (var item in blenderMap.ItemList)
         {
-            NewFunction(item, mapObject, 25, new Vector3(item.RotationX, item.RotationY, item.RotationZ));
-            
+            NewFunction(item, mapObject, 0, new Vector3(item.RotationX, item.RotationY, item.RotationZ));
         }
 
         void NewFunction(BlenderItem blenderItem, Map o, float offset, Vector3 rotation)
@@ -51,13 +47,10 @@ public static class BlenderData
             Transform t = new Transform(Vector3.Zero, rotation);
             GameObject go = new GameObject(transform: t);
 
-            
 
-            
-            
             go.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
-            go.Transform.Position.X = (blenderItem.PositionX); // / 10f;
-            go.Transform.Position.Y = (blenderItem.PositionY); // / 10f;
+            go.Transform.Position.X = (blenderItem.PositionX);// / 10f;
+            go.Transform.Position.Y = (blenderItem.PositionY);// / 10f;
             go.Transform.Position.Z = (blenderItem.PositionZ + offset); /// 10f;
 
             go.Transform.Scale.X = blenderItem.ScaleX; /// 4f;
@@ -68,21 +61,19 @@ public static class BlenderData
 
             go.ObjectId = (ObjectId)blenderItem.ItemId;
 
-            
-           
+
             ItemSchema itemSchema = new ItemSchema(go);
-            itemSchema.Forward = new BondReader.Schemas.Generic.Vector3(blenderItem.ForwardX, blenderItem.ForwardY, blenderItem.ForwardZ);
+            itemSchema.Forward =
+                new BondReader.Schemas.Generic.Vector3(blenderItem.ForwardX, blenderItem.ForwardY,
+                    blenderItem.ForwardZ);
             itemSchema.Up = new BondReader.Schemas.Generic.Vector3(blenderItem.UpX, blenderItem.UpY, blenderItem.UpZ);
 
             map.Items.AddLast(itemSchema);
             //  XMLHelper.AddObject(mapShell, mapItem.GameObject);
         }
 
-    
-        
-       
 
-        BondHelper.WriteBond(map, outputPath + "/Test.mvar");
+        BondHelper.WriteBond(map, outputPath + $"/{fileName}.mvar");
         //mapShell.WriteTo(XmlWriter.Create(Program.EXEPath + "/Test.xml"));
     }
 }

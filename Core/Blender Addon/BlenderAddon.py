@@ -23,20 +23,57 @@ from bpy.types import Operator
 
 def export_point_cloud(context, filepath):
     print("Collecting Forge Data...")
-
+     
     depsgraph = bpy.context.evaluated_depsgraph_get()  # Get ref to the evaulated "scene"?
     objects = depsgraph.scene.objects  # get evaulated objects
+    bpy.data.objects["PrimitiveCube-4x4x4.010"]
+    
+    foundMapSettings = False
+    mapSettingsObject = None
+    itemList = []
+    print("------")
+    for object in objects:
+        print(f"{object.forge_isMapSettings} map settings bool")
+        
+        if object.forge_isMapSettings == True:
+           
+            if foundMapSettings == True:
+                print(f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
+                
+                raise TypeError(f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
+                return
+            foundMapSettings = True
+            mapSettingsObject = object
 
+    mapData = MapData()
+   
 
     activeObject = context.active_object;
     activeObject = activeObject.evaluated_get(depsgraph)
     verts = activeObject.data.vertices
     itemList = []
+    
+    
     for vert in verts:
+        
+        
+        # CLOWN SHIT REMOVE LATER
+        ttt = bpy.data.objects.new(name = "test",object_data = bpy.data.objects["PrimitiveCube-4x4x4.001"].data)
+        bpy.data.collections["CLOWN"].objects.link(ttt)
+        
+        
+        # end clown shit
         print(vert.normal)
 
         exportItem = ItemData()
         pos = activeObject.matrix_world @ vert.co
+        
+        
+        #CLOWN SHIT
+        ttt.location[0] = pos.x
+        ttt.location[1] = pos.y
+        ttt.location[2] = pos.z
+        #END CLOWN
         exportItem.positionX = pos.x
         exportItem.positionY = pos.y
         exportItem.positionZ = pos.z
@@ -48,23 +85,27 @@ def export_point_cloud(context, filepath):
         exportItem.rotationX = vert.normal.x
         exportItem.rotationY = vert.normal.y
         exportItem.rotationZ = vert.normal.z
+        
+        exportItem.itemId = activeObject.forge_object_id
         print(exportItem)
-        itemList.append(exportItem.toJSON())
+        
+        
+        itemList.append(exportItem)
 
 
 
     print("------")
 
 
-    stringToSave = ""
-    for jsonString in itemList:
-        stringToSave+=f"{jsonString}"
+    mapData.itemList = itemList
+    mapData.mapId = mapSettingsObject.forge_mapId_enum
+    
 
 
 
     file = open(filepath,'w')
 
-    file.write(stringToSave)
+    file.write(mapData.toJSON()) #todo extract json writing to method
     print(f"File saved to {filepath}")
     return {'FINISHED'}
 
