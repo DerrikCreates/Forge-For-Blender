@@ -10,20 +10,21 @@ public class ForgeObjectDataReader
 
     // step over all the fields in the provided type and convert them into the expected type
     // 
-    public static T ByteParser<T>(ref T obj, byte[] bytes) 
+    public static (T obj, int length) ByteParser<T>(ref T obj, byte[] bytes, int start = 0)
     {
         var fields = typeof(T).GetFields();
+        var size = 0;
+        var end = start;
 
 
-        int start = 0;
         foreach (var field in fields)
         {
             var t = field.FieldType;
-            var size = Marshal.SizeOf(t); 
+            size = Marshal.SizeOf(t);
 
             byte[] value = new byte[size];
             Array.Copy(bytes, start, value, 0, size);
-            start += size;
+            end += size;
 
             switch (t.Name)
             {
@@ -36,10 +37,21 @@ public class ForgeObjectDataReader
                 case "Byte":
                     field.SetValue(obj, value[0]);
                     break;
+                case "UInt32":
+                    field.SetValue(obj, BitConverter.ToUInt32(value));
+                    break;
+                case "UInt64":
+                    field.SetValue(obj, BitConverter.ToUInt64(value));
+                    break;
+
+                default:
+                    throw new NotImplementedException(t.Name + " does not have a case");
+                    break;
             }
+
         }
 
-        return obj;
+        return (obj, end);
     }
 }
 
