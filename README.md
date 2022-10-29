@@ -1,6 +1,8 @@
 # Halo Infinite Forge For Blender
 WIP everything is broken. 
 
+Create an issue or join the [discord](https://derrikcreates.com/) for any questions
+
 
 This is a collection of my tools for allowing forging in blender
 
