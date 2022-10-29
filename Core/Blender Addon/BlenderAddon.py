@@ -132,20 +132,7 @@ def export_item_data(context, filepath):
     itemList = []
     print("------")
     for object in objects:
-        print(f"{object.forge_isMapSettings} map settings bool")
         
-        if object.forge_isMapSettings == True:
-           
-            if foundMapSettings == True:
-                print(f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
-                
-                raise TypeError(f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
-                return
-            foundMapSettings = True
-            mapSettingsObject = object
-            
-            
-            
         if object.forge_export_toggle == True:
 
             itemData = ItemData()
@@ -209,7 +196,7 @@ def export_item_data(context, filepath):
             print(f"Skipping {object.name} because its not marked for export")
 
     
-    if foundMapSettings == True:
+    
         
         mapData.mapId = mapSettingsObject.forge_mapId_enum
             
@@ -220,7 +207,7 @@ def export_item_data(context, filepath):
         print(f"File saved to {filepath}")
         return {'FINISHED'}
     
-    raise TypeError("No map settings where found! add a map settings object or enable the settings flag in object properties")
+    
 
     # THIS IS THE EXAMPLE ON GETING ATTRIBUTE DATA OUT OF NODE GRAPH 
     # just make sure to get the evaluated object
