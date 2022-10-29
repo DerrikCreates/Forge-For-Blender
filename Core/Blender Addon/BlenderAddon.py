@@ -307,10 +307,10 @@ class MapData:
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=None)
     
-class ForgeMapPanel(SceneButtonsPanel, Panel):
+class ForgeMapPanel(Panel):
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
-    bl_context = "Scene"
+    bl_context = "scene"
     bl_label = "Forge Map Settings"
     
     def draw(self, context):
@@ -329,7 +329,7 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        row.prop(obj,"forge_mapId_enum")
+        
         
         obj = context.object
 
@@ -491,7 +491,7 @@ def register():
     description="Halo Map ID. Only Works on THE map settings object",
     )
     
-    bpy.types.Object.forge_mapId_enum = bpy.props.EnumProperty(
+    bpy.types.Scene.forge_mapId_enum = bpy.props.EnumProperty(
         name = "",
         description="Map ID",
         items= [
