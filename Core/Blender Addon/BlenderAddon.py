@@ -198,7 +198,7 @@ def export_item_data(context, filepath):
     
     
         
-        mapData.mapId = mapSettingsObject.forge_mapId_enum
+        mapData.mapId = bpy.context.scene.forge_mapId_enum
             
         print(mapData.mapId)
         file = open(filepath,'w')
