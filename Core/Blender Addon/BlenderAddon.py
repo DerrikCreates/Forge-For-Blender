@@ -19,6 +19,13 @@ from mathutils import Vector
 from bpy.props import StringProperty, BoolProperty, EnumProperty
 from bpy.types import Operator
 
+from bpy.types import (
+    Panel,
+    UIList,
+)
+
+from rna_prop_ui import PropertyPanel
+
 
 
 def export_point_cloud(context, filepath):
@@ -299,7 +306,17 @@ class MapData:
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=None)
     
+class ForgeMapPanel(SceneButtonsPanel, Panel):
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = "Scene"
+    bl_label = "Forge Map Settings"
     
+    def draw(self, context):
+        scene = context.scene
+        layout = self.layout
+        row = layout.row()
+        row.prop(scene,"forge_mapId_enum")
 
 class ForgeItemPropertiesPanel(bpy.types.Panel):
     """Creates a Panel in the Object properties window"""
@@ -311,7 +328,8 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-
+        row.prop(obj,"forge_mapId_enum")
+        
         obj = context.object
 
         row = layout.row()
@@ -432,6 +450,7 @@ def register():
     bpy.utils.register_class(ForgeItemPropertiesPanel)
     bpy.utils.register_class(DynamicObjectLock)
     bpy.utils.register_class(ExportItemToForge)
+    bpy.utils.register_class(ForgeMapPanel)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
 
     #Properties
