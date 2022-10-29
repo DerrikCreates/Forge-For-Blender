@@ -6,7 +6,7 @@ bl_info = {
     "author": "DerrikCreates.com",
     "description": "export forge items for latter processing into a .mvar",
     "blender": (3, 3, 0),
-    "version":(0,1,0),
+    "version": (0, 1, 0),
     "location": "View3D",
     "warning": "",
     "category": "Generic"
@@ -28,60 +28,55 @@ from bpy.types import (
 from rna_prop_ui import PropertyPanel
 
 
-
 def export_point_cloud(context, filepath):
     print("Collecting Forge Data...")
-     
+
     depsgraph = bpy.context.evaluated_depsgraph_get()  # Get ref to the evaulated "scene"?
     objects = depsgraph.scene.objects  # get evaulated objects
     bpy.data.objects["PrimitiveCube-4x4x4.010"]
-    
+
     foundMapSettings = False
     mapSettingsObject = None
     itemList = []
     print("------")
     for object in objects:
         print(f"{object.forge_isMapSettings} map settings bool")
-        
+
         if object.forge_isMapSettings == True:
-           
+
             if foundMapSettings == True:
-                print(f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
-                
-                raise TypeError(f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
+                print(
+                    f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
+
+                raise TypeError(
+                    f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
                 return
             foundMapSettings = True
             mapSettingsObject = object
 
     mapData = MapData()
-   
 
     activeObject = context.active_object;
     activeObject = activeObject.evaluated_get(depsgraph)
     verts = activeObject.data.vertices
     itemList = []
-    
-    
+
     for vert in verts:
-        
-        
         # CLOWN SHIT REMOVE LATER
-        ttt = bpy.data.objects.new(name = "test",object_data = bpy.data.objects["PrimitiveCube-4x4x4.001"].data)
+        ttt = bpy.data.objects.new(name="test", object_data=bpy.data.objects["PrimitiveCube-4x4x4.001"].data)
         bpy.data.collections["CLOWN"].objects.link(ttt)
-        
-        
+
         # end clown shit
         print(vert.normal)
 
         exportItem = ItemData()
         pos = activeObject.matrix_world @ vert.co
-        
-        
-        #CLOWN SHIT
+
+        # CLOWN SHIT
         ttt.location[0] = pos.x
         ttt.location[1] = pos.y
         ttt.location[2] = pos.z
-        #END CLOWN
+        # END CLOWN
         exportItem.positionX = pos.x
         exportItem.positionY = pos.y
         exportItem.positionZ = pos.z
@@ -93,29 +88,23 @@ def export_point_cloud(context, filepath):
         exportItem.rotationX = vert.normal.x
         exportItem.rotationY = vert.normal.y
         exportItem.rotationZ = vert.normal.z
-        
+
         exportItem.itemId = activeObject.forge_object_id
         print(exportItem)
-        
-        
+
         itemList.append(exportItem)
-
-
 
     print("------")
 
-
     mapData.itemList = itemList
     mapData.mapId = mapSettingsObject.forge_mapId_enum
-    
 
+    file = open(filepath, 'w')
 
-
-    file = open(filepath,'w')
-
-    file.write(mapData.toJSON()) #todo extract json writing to method
+    file.write(mapData.toJSON())  # todo extract json writing to method
     print(f"File saved to {filepath}")
     return {'FINISHED'}
+
 
 def export_item_data(context, filepath):
     print("Collecting Forge Data...")
@@ -123,16 +112,13 @@ def export_item_data(context, filepath):
     depsgraph = bpy.context.evaluated_depsgraph_get()  # Get ref to the evaulated "scene"?
     objects = depsgraph.scene.objects  # get evaulated objects
 
-
     mapData = MapData()
-    
 
-    foundMapSettings = False
-    mapSettingsObject = None
+   
     itemList = []
     print("------")
     for object in objects:
-        
+
         if object.forge_export_toggle == True:
 
             itemData = ItemData()
@@ -146,7 +132,7 @@ def export_item_data(context, filepath):
             #        for attr in evalObject.data.attributes:
             #              print(attr.name)
 
-            #TODO add a ctor to the class and remove all this bs
+            # TODO add a ctor to the class and remove all this bs
             pos = evalObject.location
             itemData.positionX = pos.x
             itemData.positionY = pos.y
@@ -157,60 +143,54 @@ def export_item_data(context, filepath):
             itemData.rotationY = rot.y
             itemData.rotationZ = rot.z
 
-
             if evalObject.forge_use_dimensions_toggle:
                 scale = evalObject.dimensions
             else:
-                    scale = evalObject.scale
-            
+                scale = evalObject.scale
+
             itemData.scaleX = scale.x
             itemData.scaleY = scale.y
             itemData.scaleZ = scale.z
 
-            forwardVector = evalObject.matrix_world.to_quaternion() @ Vector((1.0,0.0,0.0)) ##1 1   -1 1   -1 -1   1 -1
+            forwardVector = evalObject.matrix_world.to_quaternion() @ Vector(
+                (1.0, 0.0, 0.0))  ##1 1   -1 1   -1 -1   1 -1
             forwardVector = forwardVector.normalized()
             itemData.forwardX = forwardVector.x
             itemData.forwardY = forwardVector.y
             itemData.forwardZ = forwardVector.z
 
-            upVector = evalObject.matrix_world.to_quaternion() @ Vector((0.0,0.0,1.0))##-1.0))
+            upVector = evalObject.matrix_world.to_quaternion() @ Vector((0.0, 0.0, 1.0))  ##-1.0))
             upVector = upVector.normalized()
             itemData.upX = upVector.x
             itemData.upY = upVector.y
             itemData.upz = upVector.z
-            
+
             print(evalObject.forge_object_id)
             itemData.itemId = evalObject.forge_object_id
-            
+
             print(itemData.testList)
-           
-            
-            
+
             itemList.append(itemData)
-            
-            
+
             mapData.itemList = itemList
-            
+
 
         else:
             print(f"Skipping {object.name} because its not marked for export")
 
-    
-    
-        
         mapData.mapId = bpy.context.scene.forge_mapId_enum
-            
+
         print(mapData.mapId)
-        file = open(filepath,'w')
+        file = open(filepath, 'w')
 
         file.write(mapData.toJSON())
         print(f"File saved to {filepath}")
         return {'FINISHED'}
-    
-    
 
     # THIS IS THE EXAMPLE ON GETING ATTRIBUTE DATA OUT OF NODE GRAPH 
     # just make sure to get the evaluated object
+
+
 # basePath = "G:/__Inbox/"
 # data = object_eval.data
 # CollectData(data.attributes['ID'].data,
@@ -222,32 +202,25 @@ def export_item_data(context, filepath):
 #  CollectData(data.attributes['InstanceRotation'].data,
 #             basePath + "Rotation.txt")
 
-#f = open(filepath, 'w', encoding='utf-8')
-#f.write("Hello World %s" % use_some_setting)
-#f.close()
+# f = open(filepath, 'w', encoding='utf-8')
+# f.write("Hello World %s" % use_some_setting)
+# f.close()
 
 # get up and forward rotation
 # up = obj.matrix_world.to_quaternion() @ Vector((0.0, 1.0, 0.0))
 # forward = obj.matrix_world.to_quaternion() @ Vector((0.0, 0.0, 1.0))
 
 
-
-
-
-
-
 # print(bpy.data.objects["Cube.003"].modifiers["GeometryNodes"]["Output_3_attribute_name"])
 
 
-
-
 class ItemData:
-    
+
     def __init__(self):
         self.testList = []
-    
+
     testList = None
-    
+
     positionX = None
     positionY = None
     positionZ = None
@@ -267,44 +240,36 @@ class ItemData:
     upX = None
     upY = None
     upZ = None
-    
+
     itemId = None
-    
 
-    #def toJSON(self):
+    # def toJSON(self):
     #    return json.dumps(self, default=lambda o: o.__dict__,
-     #                     sort_keys=True, indent=4)
-
-
-
-
+    #                     sort_keys=True, indent=4)
 
 
 class MapData:
-    
     mapId = None
-    
-    
-    itemList:List[ItemData] = [] 
-    
-    
-         
-        
+
+    itemList: List[ItemData] = []
+
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=None)
-    
+
+
 class ForgeMapPanel(Panel):
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = "scene"
     bl_label = "Forge Map Settings"
-    
+
     def draw(self, context):
         scene = context.scene
         layout = self.layout
         row = layout.row()
-        row.prop(scene,"forge_mapId_enum")
+        row.prop(scene, "forge_mapId_enum")
+
 
 class ForgeItemPropertiesPanel(bpy.types.Panel):
     """Creates a Panel in the Object properties window"""
@@ -316,29 +281,28 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        
-        
+
         obj = context.object
 
         row = layout.row()
         row.label(text="Halo Forge Exporter Item Properites", icon='PROPERTIES')
 
         row = layout.row()
-        #row.label(text="Active object is: " + obj.forge_test_prop)
+        # row.label(text="Active object is: " + obj.forge_test_prop)
         row = layout.row()
-        #row.prop(obj, "forge_test_prop")
-        #row.prop(obj, "forge_enum")
-        
-        row.prop(obj,'forge_export_toggle')
-        
+        # row.prop(obj, "forge_test_prop")
+        # row.prop(obj, "forge_enum")
+
+        row.prop(obj, 'forge_export_toggle')
+
         self.layout.operator('halo_forge.dynamic_object_lock')
         row = layout.row()
-        row.label(text="Map Settings (ONLY ONE OBJECT ALLOWED)", icon = 'PROPERTIES')
+        row.label(text="Map Settings (ONLY ONE OBJECT ALLOWED)", icon='PROPERTIES')
         row = layout.row()
-        row.prop(obj,"forge_isMapSettings")
+        row.prop(obj, "forge_isMapSettings")
         row = layout.row()
-        row.prop(obj,"forge_mapId_enum")
-        
+        row.prop(obj, "forge_mapId_enum")
+
         row = layout.row()
         row.label(text="***DANGER ZONE!*** DO NOT CHANGE ANYTHING BELOW")
         row = layout.row()
@@ -350,21 +314,18 @@ class ForgeItemPropertiesPanel(bpy.types.Panel):
         row.label(icon='ERROR')
         row.label(icon='ERROR')
         row.label(icon='ERROR')
-        
-        
+
         row = layout.row()
         row.prop(obj, "forge_object_id")
         row = layout.row()
-        row.prop(obj,"forge_object_variant_id")
+        row.prop(obj, "forge_object_variant_id")
         row = layout.row()
-        row.prop(obj,"forge_use_dimensions_toggle")
-        
-        
+        row.prop(obj, "forge_use_dimensions_toggle")
+
     # row.operator("mesh.primitive_cube_add")
 
 
-
-class ExportSomeData(Operator, ExportHelper): #panel for exporting data
+class ExportSomeData(Operator, ExportHelper):  # panel for exporting data
     """Exporter to save item data for later processing into an mvar format"""
     bl_idname = "halo_forge.save_item_data"  # important since its how bpy.ops.import_test.some_data is constructed
     bl_label = "Export Halo Forge Data"
@@ -399,36 +360,39 @@ class ExportSomeData(Operator, ExportHelper): #panel for exporting data
 
     def execute(self, context):
         return export_item_data(context, self.filepath)
-    
-class ExportPointCloudData(Operator,ExportHelper):
+
+
+class ExportPointCloudData(Operator, ExportHelper):
     """Export point cloud to Halo Forge"""
     bl_idname = "halo_forge.save_point_cloud"  # important since its how bpy.ops.import_test.some_data is constructed
     bl_label = "Export Halo Point Cloud"
     filename_ext = ".DCjson"
-    def execute(self,context):
-        return export_point_cloud(context,self.filepath)
+
+    def execute(self, context):
+        return export_point_cloud(context, self.filepath)
 
 
 class DynamicObjectLock(bpy.types.Operator):
     bl_idname = "halo_forge.dynamic_object_lock"
     bl_label = "Make Object Dynamic"
+
     def execute(self, context):
         print(context)
         return {'FINISHED'}
 
+
 class ExportItemToForge(bpy.types.Operator):
     bl_idname = "halo_forge.export_item_to_forge"  # important since its how bpy.ops.import_test.some_data is constructed
     bl_label = "Export Item To Forge"
-    
-    def execute(self,context):
-        print("ExportItemToForge Operator ran")
 
+    def execute(self, context):
+        print("ExportItemToForge Operator ran")
 
 
 # Only needed if you want to add into a dynamic menu
 def menu_func_export(self, context):
     self.layout.operator(ExportSomeData.bl_idname, text="Export Halo Forge Data")
-    self.layout.operator(ExportPointCloudData.bl_idname,text="Export Forge Point Cloud")
+    self.layout.operator(ExportPointCloudData.bl_idname, text="Export Forge Point Cloud")
 
 
 # Register and add to the "file selector" menu (required to use F3 search "Text Export Operator" for quick access).
@@ -441,7 +405,7 @@ def register():
     bpy.utils.register_class(ForgeMapPanel)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
 
-    #Properties
+    # Properties
     bpy.types.Object.forge_test_prop = bpy.props.StringProperty(
         name='Object scoped prop test',
     )
@@ -464,57 +428,57 @@ def register():
         default=True,
 
     )
-    
+
     ### MAP SETTINGS
     bpy.types.Object.forge_isMapSettings = bpy.props.BoolProperty(
         name="Map Settings Object",
         description="Only one should exist in a scene",
         default=False,
-    
+
     )
-    
+
     bpy.types.Object.forge_mapId = bpy.props.IntProperty(
-    name="Map ID",
-    description="Halo Map ID. Only Works on THE map settings object",
+        name="Map ID",
+        description="Halo Map ID. Only Works on THE map settings object",
     )
-    
+
     bpy.types.Scene.forge_mapId_enum = bpy.props.EnumProperty(
-        name = "",
+        name="",
         description="Map ID",
-        items= [
-            ('-1598071734',"AQUARIUS","Test 1 Tooltip desc"),
-            ('-1449092339',"BEHEMOTH","Test 2 Tooltip desc"),
-            ('847557134',"BREAKER","Test 3 Tooltip desc"),
-            ('-1044063363',"CATALYST","Test 3 Tooltip desc"),
-            ('-340635692',"FRAGMENTATION","Test 3 Tooltip desc"),
-            ('-2109972058',"HIGH_POWER","Test 3 Tooltip desc"),
-            ('-738424322',"LAUNCH_SITE","Test 3 Tooltip desc"),
-            ('1253388187',"LIVE_FIRE","Test 3 Tooltip desc"),
-            ('-687782121',"RECHARGE","Test 3 Tooltip desc"),
-            ('-785503777',"DEADLOCK","Test 3 Tooltip desc"),
+        items=[
+            ('-1598071734', "AQUARIUS", "Test 1 Tooltip desc"),
+            ('-1449092339', "BEHEMOTH", "Test 2 Tooltip desc"),
+            ('847557134', "BREAKER", "Test 3 Tooltip desc"),
+            ('-1044063363', "CATALYST", "Test 3 Tooltip desc"),
+            ('-340635692', "FRAGMENTATION", "Test 3 Tooltip desc"),
+            ('-2109972058', "HIGH_POWER", "Test 3 Tooltip desc"),
+            ('-738424322', "LAUNCH_SITE", "Test 3 Tooltip desc"),
+            ('1253388187', "LIVE_FIRE", "Test 3 Tooltip desc"),
+            ('-687782121', "RECHARGE", "Test 3 Tooltip desc"),
+            ('-785503777', "DEADLOCK", "Test 3 Tooltip desc"),
         ]
     )
-    
+
     ## MAP SETTINGS END
-    
+
     bpy.types.Object.forge_object_id = bpy.props.IntProperty(
-    
-    name="Object ID",
+
+        name="Object ID",
         description="Do not change this unless you know what you are doing!",
     )
-    
+
     bpy.types.Object.forge_object_variant_id = bpy.props.IntProperty(
-    
-    name="Variant ID",
+
+        name="Variant ID",
         description="Do not change this unless you know what you are doing!",
     )
     bpy.types.Object.forge_enum = bpy.props.EnumProperty(
-        name = "",
+        name="",
         description="Forge Enum Prop",
-        items= [
-            ('OP1',"Option 1 Name","Test 1 Tooltip desc"),
-            ('OP2',"Option 2 Name","Test 2 Tooltip desc"),
-            ('OP2',"Option 3 Name","Test 3 Tooltip desc"),
+        items=[
+            ('OP1', "Option 1 Name", "Test 1 Tooltip desc"),
+            ('OP2', "Option 2 Name", "Test 2 Tooltip desc"),
+            ('OP2', "Option 3 Name", "Test 3 Tooltip desc"),
         ]
     )
 
@@ -531,4 +495,3 @@ if __name__ == "__main__":
 
     # test call
     bpy.ops.halo_forge.save_item_data('INVOKE_DEFAULT')
-
