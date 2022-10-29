@@ -1,4 +1,4 @@
-# Halo-Infinite-Forge-For-Blender
+# Halo Infinite Forge For Blender
 WIP everything is broken. 
 
 
