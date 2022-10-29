@@ -6,6 +6,7 @@ bl_info = {
     "author": "DerrikCreates.com",
     "description": "export forge items for latter processing into a .mvar",
     "blender": (3, 3, 0),
+    "version":(0,1,0),
     "location": "View3D",
     "warning": "",
     "category": "Generic"
