@@ -40,6 +40,7 @@ def export_point_cloud(context, filepath):
     itemList = []
     print("------")
     for object in objects:
+        print(object)
         print(f"{object.forge_isMapSettings} map settings bool")
 
         if object.forge_isMapSettings == True:
@@ -112,13 +113,14 @@ def export_item_data(context, filepath):
     depsgraph = bpy.context.evaluated_depsgraph_get()  # Get ref to the evaulated "scene"?
     objects = depsgraph.scene.objects  # get evaulated objects
 
+    
     mapData = MapData()
 
-   
     itemList = []
     print("------")
     for object in objects:
-
+        print(1111)
+        print(objects)
         if object.forge_export_toggle == True:
 
             itemData = ItemData()
@@ -173,19 +175,16 @@ def export_item_data(context, filepath):
             itemList.append(itemData)
 
             mapData.itemList = itemList
-
-
         else:
             print(f"Skipping {object.name} because its not marked for export")
 
-        mapData.mapId = bpy.context.scene.forge_mapId_enum
+    mapData.mapId = bpy.context.scene.forge_mapId_enum
 
-        print(mapData.mapId)
-        file = open(filepath, 'w')
-
-        file.write(mapData.toJSON())
-        print(f"File saved to {filepath}")
-        return {'FINISHED'}
+    print(mapData.mapId)
+    file = open(filepath, 'w')
+    file.write(mapData.toJSON())
+    print(f"File saved to {filepath}")
+    return {'FINISHED'}
 
     # THIS IS THE EXAMPLE ON GETING ATTRIBUTE DATA OUT OF NODE GRAPH 
     # just make sure to get the evaluated object
