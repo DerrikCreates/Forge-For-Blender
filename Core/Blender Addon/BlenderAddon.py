@@ -115,12 +115,16 @@ def export_item_data(context, filepath):
 
     
     mapData = MapData()
-
+    
+    
     itemList = []
     print("------")
     for object in objects:
-        print(1111)
-        print(objects)
+        
+        if object.forge_object_id == 0:
+            print(f"{object.name} does not have a valid object id skipping export")
+            continue
+            
         if object.forge_export_toggle == True:
 
             itemData = ItemData()
