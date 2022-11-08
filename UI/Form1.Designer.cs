@@ -35,6 +35,7 @@ partial class Form1
             this.label1 = new System.Windows.Forms.Label();
             this.label_ExportPath = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
+            this.button_dev = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_LoadBlenderJson
@@ -108,12 +109,23 @@ partial class Form1
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
+            // button_dev
+            // 
+            this.button_dev.Location = new System.Drawing.Point(303, 110);
+            this.button_dev.Name = "button_dev";
+            this.button_dev.Size = new System.Drawing.Size(75, 23);
+            this.button_dev.TabIndex = 12;
+            this.button_dev.Text = "Dev";
+            this.button_dev.UseVisualStyleBackColor = true;
+            this.button_dev.Click += new System.EventHandler(this.button_dev_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
             this.ClientSize = new System.Drawing.Size(390, 145);
+            this.Controls.Add(this.button_dev);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label_ExportPath);
             this.Controls.Add(this.label1);
@@ -138,4 +150,5 @@ partial class Form1
     private Label label1;
     private Label label_ExportPath;
     private Button button2;
+    private Button button_dev;
 }

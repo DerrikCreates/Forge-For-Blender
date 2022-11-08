@@ -259,9 +259,24 @@ public partial class Form1 : Form
     {
         if (about.IsDisposed)
         {
-            var about = new AboutForm();
+            about = new AboutForm();
         }
         about.ShowDialog();
 
+    }
+
+    private void button3_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    DevForm dev = new DevForm();
+    private void button_dev_Click(object sender, EventArgs e)
+    {
+        if (dev.IsDisposed)
+        {
+            dev = new DevForm();
+        }
+        dev.ShowDialog();
     }
 }
