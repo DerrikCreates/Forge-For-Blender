@@ -1,8 +1,12 @@
+using Serilog;
 using System.Runtime.InteropServices;
 
-public class ForgeObjectDataReader()
+namespace ForgeTools;
+
+public class ForgeObjectDataReader
 {
-    public void Read()
+    public static ForgeModelData
+        ReadForgeObjectFile(string filePath) //basic prim block id 1759788903  //for prim block -340615357
     {
         //variant ids
         //68684793
@@ -10,15 +14,23 @@ public class ForgeObjectDataReader()
         //-359788102
         //603400642
         //787299103
-        var fileName = "fo_fore_prim_block_a.forgeobjectdata";
-        var path = "C:/Users/Derrik/Documents/";
+
+        if (!File.Exists(filePath))
+        {
+            Log.Error("Selected File does not exist");
+            return null;
+        }
 
 
-        var bytes = File.ReadAllBytes(path + fileName);
-        var stream = File.Open(path + fileName, FileMode.Open);
+        var fileName = Path.GetFileName(filePath);
+        //var path = "C:/Users/Derrik/Documents/";
+
+
+        var bytes = File.ReadAllBytes(filePath);
+        var stream = File.Open(filePath, FileMode.Open);
         BinaryReader reader = new BinaryReader(stream);
 
-        var header = FromBinaryReader<UCS_Header>(reader);
+        var header = FromBinaryReader<UcsHeader>(reader);
 
         var tagList = new List<UCSTagDependecyList>();
         //tagList.Add(FromBinaryReader<UCSTagDependecyList>(reader));
@@ -60,8 +72,29 @@ public class ForgeObjectDataReader()
 
         //var pos = reader.BaseStream.Position;
 
+        var string_table_position = reader.BaseStream.Position;
         var string_table = new string(reader.ReadChars((int)header.string_table_size));
+        string static_model_path;
+        List<char> staticObjChars = new List<char>();
+        for (int i = 0; i < string_table.Length; i++)
+        {
+            if (string_table[i] == 0)
+            {
+                break;
+            }
 
+
+            staticObjChars.Add(string_table[i]);
+        }
+
+        static_model_path = new string(staticObjChars.ToArray());
+
+        string[] parts = static_model_path.Split("\\");
+        parts[parts.Length - 1] = "";
+        static_model_path = string.Join("/", parts);
+        //var staticObjectFilePath = staticObj.Contains(
+
+        long zoneset_start = reader.BaseStream.Position;
         byte[] zoneset_data = reader.ReadBytes((int)header.zoneset_data_size);
 
         var extraDataSize = Math.Abs((int)header.data_size - (int)reader.BaseStream.Position);
@@ -72,9 +105,24 @@ public class ForgeObjectDataReader()
 
         byte[] tag_data = reader.ReadBytes((int)bytes.Length - (int)reader.BaseStream.Position);
 
+        byte[] objid = new byte[4];
+
+
+        Array.Copy(bytes, zoneset_start + header.zoneset_data_size - 8, objid, 0, 4);
+
+        int objectID = BitConverter.ToInt32(objid, 0);
+
 
         stream.Close();
+
+
+        ForgeModelData forgeModelData = new ForgeModelData();
+        forgeModelData.filePath = static_model_path;
+        forgeModelData.ItemId = objectID;
+
+        return forgeModelData;
     }
+
 
     private static T FromBinaryReader<T>(BinaryReader reader)
     {
@@ -89,8 +137,14 @@ public class ForgeObjectDataReader()
         return theStructure;
     }
 
+    public class ForgeModelData
+    {
+        public int ItemId;
+        public string filePath;
+    }
 
-    public struct UCS_Header
+    [StructLayout(LayoutKind.Sequential)]
+    public struct UcsHeader
     {
         //https://github.com/ChimpsAtSea/Blam-Creation-Suite/blob/29dbb93f72063eb31bad9e6583f841fa178352cb/Tags/MandrillLib/CacheInterface/infinite/infinite_ucs_reader.h#L3
 
@@ -102,7 +156,7 @@ public class ForgeObjectDataReader()
         public ulong
             asset_checksum; // Murmur3_x64_128 hash of(what appears to be) the original file that this file was built from.This is not always the same thing as the file stored in the module.
 
-        public uint tag_dependency_count; // Number of tag dependencies
+        public readonly uint tag_dependency_count; // Number of tag dependencies
         public uint nugget_count; // Number of data blocks
         public uint tag_block_count; // Number of tag structs
         public uint data_reference_count; // Number of data references
@@ -124,33 +178,33 @@ public class ForgeObjectDataReader()
 
         public int unknown4C;
         /*
-            public int Magic { get; set; }
-            public int Version { get; set; }
-    
-            public ulong Unknown8 { get; set; }
-            public ulong AssetChecksum { get; set; }
-    
-            public uint TagDependecyCount { get; set; }
-            public uint NuggetCount { get; set; }
-            public uint TagBlockCount { get; set; }
-            public uint DataReferenceCount { get; set; }
-            public uint TagReferenceCount { get; set; }
-            public uint StringTableSize { get; set; }
-            public uint ZonesetDataSize { get; set; }
-    
-            public int unknown19 { get; set; }
-            public uint HeaderSize { get; set; }
-            public uint DataSize { get; set; }
-            public uint ResourceDataSize { get; set; }
-    
-            public int Unknown18 { get; set; }
-    
-            public byte HeaderAlignment { get; set; }
-            public byte TagDataAlignment { get; set; }
-            public byte ResourceData { get; set; }
-            public byte Unknow4B { get; set; }
-            public int Unknown4C { get; set; }
-            */
+        public int Magic { get; set; }
+        public int Version { get; set; }
+
+        public ulong Unknown8 { get; set; }
+        public ulong AssetChecksum { get; set; }
+
+        public uint TagDependecyCount { get; set; }
+        public uint NuggetCount { get; set; }
+        public uint TagBlockCount { get; set; }
+        public uint DataReferenceCount { get; set; }
+        public uint TagReferenceCount { get; set; }
+        public uint StringTableSize { get; set; }
+        public uint ZonesetDataSize { get; set; }
+
+        public int unknown19 { get; set; }
+        public uint HeaderSize { get; set; }
+        public uint DataSize { get; set; }
+        public uint ResourceDataSize { get; set; }
+
+        public int Unknown18 { get; set; }
+
+        public byte HeaderAlignment { get; set; }
+        public byte TagDataAlignment { get; set; }
+        public byte ResourceData { get; set; }
+        public byte Unknow4B { get; set; }
+        public int Unknown4C { get; set; }
+        */
     }
 
     public struct UCSTagDependecyList
@@ -206,4 +260,7 @@ public class ForgeObjectDataReader()
         public uint nameOffset;
         public int DependencyIndex;
     }
+
+
+    // You can define other methods, fields, classes and namespaces here
 }
