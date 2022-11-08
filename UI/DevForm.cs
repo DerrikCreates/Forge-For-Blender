@@ -10,7 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.VisualBasic.Logging;
 using static ForgeTools.ForgeObjectDataReader;
+using Log = Serilog.Log;
 
 namespace DerriksForgeTools
 {
@@ -31,17 +33,22 @@ namespace DerriksForgeTools
                 List<ForgeModelData> data = new List<ForgeModelData>();
                 foreach (var item in files)
                 {
-                    data.Add(ReadForgeObjectFile(item));
+                    var obj = ReadForgeObjectFile(item);
 
+                    if (obj != null)
+                    {
+                        data.Add(obj);
+                        
+                    }
+
+                    
+                    
                 }
 
                 string json = JsonConvert.SerializeObject(data);
 
                 File.WriteAllText(folderPath + "/ItemData.json", json);
-
-
             }
-
         }
     }
 }

@@ -5,8 +5,11 @@ namespace ForgeTools;
 
 public class ForgeObjectDataReader
 {
-    public static ForgeModelData
-        ReadForgeObjectFile(string filePath) //basic prim block id 1759788903  //for prim block -340615357
+    
+    //TODO the file Z:\Halo\ForgeObjectData\assault_rifle_longshot.forgeobjectdata string data is offset by 16/15 bytes. might have something to do with the header alignment or off by 1 or an edge case for this object. ids in the header and see if the object is special in any way
+    public static ForgeModelData? ReadForgeObjectFile(string filePath,
+            string rootGamePath = "Z:/Halo/HaloData/__chore/gen__/")
+        //basic prim block id 1759788903  //for prim block -340615357
     {
         //variant ids
         //68684793
@@ -89,6 +92,12 @@ public class ForgeObjectDataReader
 
         static_model_path = new string(staticObjChars.ToArray());
 
+        if (static_model_path == "")
+        {
+            Log.Error("Item {filePath} does not have a render model returning", filePath);
+            return null;
+        }
+
         string[] parts = static_model_path.Split("\\");
         parts[parts.Length - 1] = "";
         static_model_path = string.Join("/", parts);
@@ -120,6 +129,14 @@ public class ForgeObjectDataReader
         forgeModelData.filePath = static_model_path;
         forgeModelData.ItemId = objectID;
 
+        var renderModels = Directory.GetFiles(rootGamePath + static_model_path, "*.render_model");
+        if (renderModels.Length != 1)
+        {
+            throw new Exception($"This is {renderModels.Length} render models when 1 is expected");
+        }
+
+        forgeModelData.RenderModelPath = renderModels[0];
+
         return forgeModelData;
     }
 
@@ -141,6 +158,7 @@ public class ForgeObjectDataReader
     {
         public int ItemId;
         public string filePath;
+        public string RenderModelPath;
     }
 
     [StructLayout(LayoutKind.Sequential)]
