@@ -14,6 +14,7 @@ bl_info = {
 
 import bpy
 import json
+from types import SimpleNamespace
 from typing import List
 from bpy_extras.io_utils import ExportHelper
 from mathutils import Vector
@@ -398,6 +399,30 @@ def menu_func_export(self, context):
     self.layout.operator(ExportPointCloudData.bl_idname, text="Export Forge Point Cloud")
 
 
+
+class LoadForgeObejcts(bpy.types.Operator):
+    bl_idname = "halo_forge.load_forge_objects"
+    bl_label = "Load forge objects DEV ONLY"
+
+    def execute(self, context):
+        rootPath= "Z:/Halo/HaloData/__chore/gen__/"
+        f = open("Z:/Halo/ItemData.json","r")
+        data = f.read()
+        f.close()
+        obj = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+        print(obj[1])
+        
+       # for x in obj:
+            
+        filepath =  filepath=obj[1].filePath;
+        
+        
+        
+        print(f"Z:/Halo/HaloData/__chore/gen__/{filepath}")
+        
+       # bpy.ops.infinite.rendermodel(f"Z:/Halo/HaloData/__chore/gen__{filepath}", auto_import_dependencies=False, import_uvs=True, import_weights=True, import_normals=True, reuse_textures=True, add_materials=True, populate_shader=False, import_model=True, use_modules=False, mipmap=0, norm_signed=False, lod=0, scale_modifier=(1, 1, 1))
+        
+        return {'FINISHED'}
 # Register and add to the "file selector" menu (required to use F3 search "Text Export Operator" for quick access).
 def register():
     bpy.utils.register_class(ExportSomeData)
@@ -406,6 +431,7 @@ def register():
     bpy.utils.register_class(DynamicObjectLock)
     bpy.utils.register_class(ExportItemToForge)
     bpy.utils.register_class(ForgeMapPanel)
+    bpy.utils.register_class(LoadForgeObejcts)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
 
     # Properties
@@ -498,3 +524,9 @@ if __name__ == "__main__":
 
     # test call
     bpy.ops.halo_forge.save_item_data('INVOKE_DEFAULT')
+
+
+
+class ForgeObjectDataTagFile():
+    ItemId = None
+    filePath = None
