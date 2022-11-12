@@ -278,7 +278,11 @@ public class ForgeObjectDataReader
         public uint nameOffset;
         public int DependencyIndex;
     }
-
+    
 
     // You can define other methods, fields, classes and namespaces here
 }
+
+
+
+
