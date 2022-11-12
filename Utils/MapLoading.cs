@@ -25,6 +25,9 @@ public class MapLoading
         foreach (var item in itemElements.Elements())
         {
             var go = new GameObject();
+
+
+            
             
             //  go.ObjectId =
             //      (ObjectId)int.Parse(item.XPathSelectElement("/struct/list/struct/struct[@id='2']/int32").Value);
