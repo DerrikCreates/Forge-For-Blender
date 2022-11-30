@@ -58,7 +58,7 @@ def export_point_cloud(context, filepath):
 
     mapData = MapData()
 
-    activeObject = context.active_object;
+    activeObject = context.active_object
     activeObject = activeObject.evaluated_get(depsgraph)
     verts = activeObject.data.vertices
     itemList = []
@@ -140,6 +140,13 @@ def export_item_data(context, filepath):
             #              print(attr.name)
 
             # TODO add a ctor to the class and remove all this bs
+            
+            quat = evalObject.rotation_euler.to_quaternion()
+            itemData.qX = quat.x
+            itemData.qY = quat.y
+            itemData.qZ = quat.z
+            itemData.qW = quat.w
+            
             pos = evalObject.location
             itemData.positionX = pos.x
             itemData.positionY = pos.y
@@ -159,8 +166,7 @@ def export_item_data(context, filepath):
             itemData.scaleY = scale.y
             itemData.scaleZ = scale.z
 
-            forwardVector = evalObject.matrix_world.to_quaternion() @ Vector(
-                (1.0, 0.0, 0.0))  ##1 1   -1 1   -1 -1   1 -1
+            forwardVector = evalObject.matrix_world.to_quaternion() @ Vector((1.0, 0.0, 0.0))  ##1 1   -1 1   -1 -1   1 -1
             forwardVector = forwardVector.normalized()
             itemData.forwardX = forwardVector.x
             itemData.forwardY = forwardVector.y
@@ -168,6 +174,7 @@ def export_item_data(context, filepath):
 
             upVector = evalObject.matrix_world.to_quaternion() @ Vector((0.0, 0.0, 1.0))  ##-1.0))
             upVector = upVector.normalized()
+            
             itemData.upX = upVector.x
             itemData.upY = upVector.y
             itemData.upz = upVector.z
@@ -225,6 +232,11 @@ class ItemData:
 
     testList = None
 
+    qX = None
+    qY = None
+    qZ = None
+    qW = None
+    
     positionX = None
     positionY = None
     positionZ = None
