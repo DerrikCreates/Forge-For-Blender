@@ -64,8 +64,7 @@ public static class BlenderData
 
             ItemSchema itemSchema = new ItemSchema(go);
             itemSchema.Forward =
-                new BondReader.Schemas.Generic.Vector3(blenderItem.ForwardX, blenderItem.ForwardY,
-                    blenderItem.ForwardZ);
+                new BondReader.Schemas.Generic.Vector3(blenderItem.ForwardX, blenderItem.ForwardY, blenderItem.ForwardZ);
             itemSchema.Up = new BondReader.Schemas.Generic.Vector3(blenderItem.UpX, blenderItem.UpY, blenderItem.UpZ);
 
             map.Items.AddLast(itemSchema);

@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Reflection;
+using ForgeTools;
 using Newtonsoft.Json;
 using Serilog;
 using Serilog.Formatting.Compact;
@@ -79,6 +80,8 @@ static class Program
 
 
         File.WriteAllText(file.FullName, JsonConvert.SerializeObject(Settings));
+
+        var data = ForgeObjectDataReader.ReadForgeObjectFile("Z:/Halo/HaloData/globals/forge/palettes/gameplay.forgepalettedefinition");
     }
 
 

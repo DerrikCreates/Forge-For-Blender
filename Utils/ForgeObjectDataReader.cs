@@ -95,7 +95,7 @@ public class ForgeObjectDataReader
         if (static_model_path == "")
         {
             Log.Error("Item {filePath} does not have a render model returning", filePath);
-            return null;
+           // return null;
         }
 
         string[] parts = static_model_path.Split("\\");
@@ -129,13 +129,13 @@ public class ForgeObjectDataReader
         forgeModelData.filePath = static_model_path;
         forgeModelData.ItemId = objectID;
 
-        var renderModels = Directory.GetFiles(rootGamePath + static_model_path, "*.render_model");
-        if (renderModels.Length != 1)
+        //var renderModels = Directory.GetFiles(rootGamePath + static_model_path, "*.render_model");
+        //if (renderModels.Length != 1)
         {
-            throw new Exception($"This is {renderModels.Length} render models when 1 is expected");
+            //throw new Exception($"This is {renderModels.Length} render models when 1 is expected");
         }
 
-        forgeModelData.RenderModelPath = renderModels[0];
+       // forgeModelData.RenderModelPath = renderModels[0];
 
         return forgeModelData;
     }
