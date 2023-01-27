@@ -81,7 +81,17 @@ static class Program
 
         File.WriteAllText(file.FullName, JsonConvert.SerializeObject(Settings));
 
-        var data = ForgeObjectDataReader.ReadForgeObjectFile("Z:/Halo/HaloData/globals/forge/palettes/gameplay.forgepalettedefinition");
+        var files = Directory.GetFiles("Z:/Halo/ForgeObjectData", "*.forgeobjectdata");
+        string modelPath = ""; 
+        foreach (var f in files)
+        {
+            var data = ForgeObjectReader.ReadForgeObjectFile(f);
+            
+
+        }
+        
+        
+        
     }
 
 

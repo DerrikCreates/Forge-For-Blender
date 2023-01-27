@@ -1,13 +1,17 @@
 using Serilog;
 using System.Runtime.InteropServices;
+using ForgeTools.Core.DataModels;
+
 
 namespace ForgeTools;
-
-public class ForgeObjectDataReader
+/// <summary>
+/// Tools for reading forge objects / UCSH files
+/// </summary>
+public static class ForgeObjectReader
 {
     
     //TODO the file Z:\Halo\ForgeObjectData\assault_rifle_longshot.forgeobjectdata string data is offset by 16/15 bytes. might have something to do with the header alignment or off by 1 or an edge case for this object. ids in the header and see if the object is special in any way
-    public static ForgeModelData? ReadForgeObjectFile(string filePath,
+    public static ForgeAssetData? ReadForgeObjectFile(string filePath,
             string rootGamePath = "Z:/Halo/HaloData/__chore/gen__/")
         //basic prim block id 1759788903  //for prim block -340615357
     {
@@ -35,6 +39,7 @@ public class ForgeObjectDataReader
 
         var header = FromBinaryReader<UcsHeader>(reader);
 
+        
         var tagList = new List<UCSTagDependecyList>();
         //tagList.Add(FromBinaryReader<UCSTagDependecyList>(reader));
         for (int i = 0; i < header.tag_dependency_count; i++)
@@ -42,21 +47,21 @@ public class ForgeObjectDataReader
             tagList.Add(FromBinaryReader<UCSTagDependecyList>(reader));
         }
 
-
+        var Nuggets_position = reader.BaseStream.Position;
         var Nuggets = new List<UCSNugget>();
         for (int i = 0; i < header.nugget_count; i++)
         {
             Nuggets.Add(FromBinaryReader<UCSNugget>(reader));
         }
 
-
+        var  tag_block_instances_position = reader.BaseStream.Position;
         var tag_block_instances = new List<TagBlockData>();
 
         for (int i = 0; i < header.tag_block_count; i++)
         {
             tag_block_instances.Add(FromBinaryReader<TagBlockData>(reader));
         }
-
+        var tag_data_instances_position = reader.BaseStream.Position;
         var tag_data_instances = new List<DataReferenceList>();
 
         for (int i = 0; i < header.data_reference_count; i++)
@@ -64,6 +69,7 @@ public class ForgeObjectDataReader
             tag_data_instances.Add(FromBinaryReader<DataReferenceList>(reader));
         }
 
+        var tag_reference_position = reader.BaseStream.Position;
         var tag_reference = new List<TagReferenceList>();
         for (int i = 0; i < header.tag_reference_count; i++)
         {
@@ -95,7 +101,7 @@ public class ForgeObjectDataReader
         if (static_model_path == "")
         {
             Log.Error("Item {filePath} does not have a render model returning", filePath);
-           // return null;
+            return null;
         }
 
         string[] parts = static_model_path.Split("\\");
@@ -125,7 +131,7 @@ public class ForgeObjectDataReader
         stream.Close();
 
 
-        ForgeModelData forgeModelData = new ForgeModelData();
+        ForgeAssetData forgeModelData = new ForgeAssetData();
         forgeModelData.filePath = static_model_path;
         forgeModelData.ItemId = objectID;
 
@@ -137,6 +143,8 @@ public class ForgeObjectDataReader
 
        // forgeModelData.RenderModelPath = renderModels[0];
 
+      
+       
         return forgeModelData;
     }
 
@@ -154,12 +162,7 @@ public class ForgeObjectDataReader
         return theStructure;
     }
 
-    public class ForgeModelData
-    {
-        public int ItemId;
-        public string filePath;
-        public string RenderModelPath;
-    }
+    
 
     [StructLayout(LayoutKind.Sequential)]
     public struct UcsHeader

@@ -10,8 +10,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ForgeTools.Core;
+using ForgeTools.Core.DataModels;
 using Microsoft.VisualBasic.Logging;
-using static ForgeTools.ForgeObjectDataReader;
+using static ForgeTools.ForgeObjectReader;
 using Log = Serilog.Log;
 
 namespace DerriksForgeTools
@@ -25,30 +27,7 @@ namespace DerriksForgeTools
 
         private void button_gatherItemData_Click(object sender, EventArgs e)
         {
-            string folderPath;
-            if (Utils.SelectFolderDialog(out folderPath))
-            {
-                string[] files = System.IO.Directory.GetFiles(folderPath, "*.forgeobjectdata");
-
-                List<ForgeModelData> data = new List<ForgeModelData>();
-                foreach (var item in files)
-                {
-                    var obj = ReadForgeObjectFile(item);
-
-                    if (obj != null)
-                    {
-                        data.Add(obj);
-                        
-                    }
-
-                    
-                    
-                }
-
-                string json = JsonConvert.SerializeObject(data);
-
-                File.WriteAllText(folderPath + "/ItemData.json", json);
-            }
+            ForgeAssetCollector.CollectForgeObjectData();
         }
     }
 }

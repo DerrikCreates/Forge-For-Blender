@@ -435,8 +435,37 @@ class LoadForgeObejcts(bpy.types.Operator):
        # bpy.ops.infinite.rendermodel(f"Z:/Halo/HaloData/__chore/gen__{filepath}", auto_import_dependencies=False, import_uvs=True, import_weights=True, import_normals=True, reuse_textures=True, add_materials=True, populate_shader=False, import_model=True, use_modules=False, mipmap=0, norm_signed=False, lod=0, scale_modifier=(1, 1, 1))
         
         return {'FINISHED'}
+    
+class MassImportHaloAssets(bpy.types.Operator):
+    bl_idname = "forge.mass_import"
+    bl_label = "MassImportHaloAssets"
+    
+    def execute(self, context):
+        # Implement your first function here
+        
+         
+        f = open("G:\\__Inbox\\terrainTest.json")
+        
+        jsonStr = f.read()
+
+       # print(jsonStr)
+
+        aList = json.loads(jsonStr)
+
+        for item in aList:
+            print(f"{item['id']} {item['path']}")
+            bpy.ops.infinite.rendermodel(filepath="", auto_import_dependencies=False, import_uvs=True,
+ import_weights=True, import_normals=True, reuse_textures=True, add_materials=True, populate_shader=False,
+ import_model=True, use_modules=False, mipmap=0, norm_signed=False, lod=0, scale_modifier=(1, 1, 1))
+            
+        
+        f.close()
+        
+        return {'FINISHED'}
+    
 # Register and add to the "file selector" menu (required to use F3 search "Text Export Operator" for quick access).
 def register():
+    bpy.utils.register_class(MassImportHaloAssets)
     bpy.utils.register_class(ExportSomeData)
     bpy.utils.register_class(ExportPointCloudData)
     bpy.utils.register_class(ForgeItemPropertiesPanel)
