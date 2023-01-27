@@ -54,7 +54,7 @@ def export_point_cloud(context, filepath):
                     f"{mapSettingsObject.name} and {object.name} are both map settings objects. Remove one or unflag it in Object Properties")
                 return
             foundMapSettings = True
-            mapSettingsObject = object
+            mapSettingsObject = object 
 
     mapData = MapData()
 
@@ -463,8 +463,58 @@ class MassImportHaloAssets(bpy.types.Operator):
         
         return {'FINISHED'}
     
+    
+    
+    
+class PlaceItemsOnVerts(bpy.types.Operator):
+    bl_idname = "forge.items_to_verts"
+    bl_label = "Forge Items To Verticies"
+    
+    def execute(self, context):
+        depsgraph = context.evaluated_depsgraph_get()
+        obj = context.object
+        
+        active = context.object
+        selected = context.selected_objects
+        item_to_copy = None
+        
+        last_index = len(selected) - 1
+        if last_index != 1:
+            print("select 2 items")
+            return {'FINISHED'}
+        
+        for object in selected:
+            if active != object:
+                item_to_copy = object
+                
+        
+        print(f"The item to copy is: {item_to_copy}")
+          
+          
+              
+        
+        print(f"{active} is the item to copy to")
+        print(f"{item_to_copy} is the item to copy")           
+        object_eval = obj.evaluated_get(depsgraph)
+        
+       # v =  object_eval.data.vertices[0]
+        collection = bpy.data.collections.new(name="forge point cloud")
+        scene_collection = context.scene.collection
+        
+        
+        scene_collection.children.link(collection)
+        for vert in object_eval.data.vertices:
+                
+            new_item = item_to_copy.copy()
+            collection.objects.link(new_item)
+            matrix = active.matrix_world    
+            new_item.location = matrix @ vert.co
+        
+        return {'FINISHED'}
+    
 # Register and add to the "file selector" menu (required to use F3 search "Text Export Operator" for quick access).
 def register():
+    bpy.utils.register_class(PlaceItemsOnVerts)
     bpy.utils.register_class(MassImportHaloAssets)
     bpy.utils.register_class(ExportSomeData)
     bpy.utils.register_class(ExportPointCloudData)
