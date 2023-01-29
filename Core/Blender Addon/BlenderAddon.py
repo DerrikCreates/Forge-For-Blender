@@ -512,8 +512,52 @@ class PlaceItemsOnVerts(bpy.types.Operator):
         
         return {'FINISHED'}
     
+class HideNonForgeObjects(bpy.types.Operator):
+        bl_idname = "forge.hide_nonforge_objects"
+        bl_label = "Hide Nonforge Objects"
+        def execute(self, context):
+            for obj in bpy.data.objects:
+                if obj.forge_object_id != 0:
+                    continue
+                obj.hide_set(True)
+            return {'FINISHED'}
+        
+class ShowNonForgeObjects(bpy.types.Operator):
+        bl_idname = "forge.show_nonforge_objects"
+        bl_label = "Show Nonforge Objects"
+        def execute(self, context):
+            for obj in bpy.data.objects:
+                if obj.forge_object_id != 0:
+                    continue
+                obj.hide_set(False)
+            return {'FINISHED'}
+        
+class ShowForgeObjects(bpy.types.Operator):
+        bl_idname = "forge.show_forge_objects"
+        bl_label = "Show forge Objects"
+        def execute(self, context):
+            for obj in bpy.data.objects:
+                if obj.forge_object_id == 0:
+                    continue
+                obj.hide_set(False)
+            return {'FINISHED'}
+        
+class HideForgeObjects(bpy.types.Operator):
+        bl_idname = "forge.hide_forge_objects"
+        bl_label = "Hide Forge Objects"
+        def execute(self, context):
+            for obj in bpy.data.objects:
+                if obj.forge_object_id == 0:
+                    continue
+                obj.hide_set(True)
+            return {'FINISHED'}
+    
 # Register and add to the "file selector" menu (required to use F3 search "Text Export Operator" for quick access).
 def register():
+    bpy.utils.register_class(HideForgeObjects)
+    bpy.utils.register_class(ShowForgeObjects)
+    bpy.utils.register_class(ShowNonForgeObjects)
+    bpy.utils.register_class(HideNonForgeObjects)
     bpy.utils.register_class(PlaceItemsOnVerts)
     bpy.utils.register_class(MassImportHaloAssets)
     bpy.utils.register_class(ExportSomeData)
