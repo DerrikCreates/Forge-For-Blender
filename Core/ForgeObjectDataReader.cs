@@ -4,15 +4,14 @@ using ForgeTools.Core.DataModels;
 
 
 namespace ForgeTools;
+
 /// <summary>
 /// Tools for reading forge objects / UCSH files
 /// </summary>
 public static class ForgeObjectReader
 {
-    
     //TODO the file Z:\Halo\ForgeObjectData\assault_rifle_longshot.forgeobjectdata string data is offset by 16/15 bytes. might have something to do with the header alignment or off by 1 or an edge case for this object. ids in the header and see if the object is special in any way
-    public static ForgeAssetData? ReadForgeObjectFile(string filePath,
-            string rootGamePath = "Z:/Halo/HaloData/__chore/gen__/")
+    public static ForgeAssetData? ReadForgeObjectFile(string filePath)
         //basic prim block id 1759788903  //for prim block -340615357
     {
         //variant ids
@@ -39,7 +38,7 @@ public static class ForgeObjectReader
 
         var header = FromBinaryReader<UcsHeader>(reader);
 
-        
+
         var tagList = new List<UCSTagDependecyList>();
         //tagList.Add(FromBinaryReader<UCSTagDependecyList>(reader));
         for (int i = 0; i < header.tag_dependency_count; i++)
@@ -54,13 +53,14 @@ public static class ForgeObjectReader
             Nuggets.Add(FromBinaryReader<UCSNugget>(reader));
         }
 
-        var  tag_block_instances_position = reader.BaseStream.Position;
+        var tag_block_instances_position = reader.BaseStream.Position;
         var tag_block_instances = new List<TagBlockData>();
 
         for (int i = 0; i < header.tag_block_count; i++)
         {
             tag_block_instances.Add(FromBinaryReader<TagBlockData>(reader));
         }
+
         var tag_data_instances_position = reader.BaseStream.Position;
         var tag_data_instances = new List<DataReferenceList>();
 
@@ -83,7 +83,7 @@ public static class ForgeObjectReader
 
         var string_table_position = reader.BaseStream.Position;
         var string_table = new string(reader.ReadChars((int)header.string_table_size));
-        string static_model_path;
+        string? static_model_path;
         List<char> staticObjChars = new List<char>();
         for (int i = 0; i < string_table.Length; i++)
         {
@@ -98,11 +98,6 @@ public static class ForgeObjectReader
 
         static_model_path = new string(staticObjChars.ToArray());
 
-        if (static_model_path == "")
-        {
-            Log.Error("Item {filePath} does not have a render model returning", filePath);
-            return null;
-        }
 
         string[] parts = static_model_path.Split("\\");
         parts[parts.Length - 1] = "";
@@ -132,7 +127,7 @@ public static class ForgeObjectReader
 
 
         ForgeAssetData forgeModelData = new ForgeAssetData();
-        forgeModelData.filePath = static_model_path;
+        forgeModelData.FileName = fileName;
         forgeModelData.ItemId = objectID;
 
         //var renderModels = Directory.GetFiles(rootGamePath + static_model_path, "*.render_model");
@@ -141,10 +136,9 @@ public static class ForgeObjectReader
             //throw new Exception($"This is {renderModels.Length} render models when 1 is expected");
         }
 
-       // forgeModelData.RenderModelPath = renderModels[0];
+        // forgeModelData.RenderModelPath = renderModels[0];
 
-      
-       
+
         return forgeModelData;
     }
 
@@ -162,7 +156,6 @@ public static class ForgeObjectReader
         return theStructure;
     }
 
-    
 
     [StructLayout(LayoutKind.Sequential)]
     public struct UcsHeader
@@ -281,11 +274,7 @@ public static class ForgeObjectReader
         public uint nameOffset;
         public int DependencyIndex;
     }
-    
+
 
     // You can define other methods, fields, classes and namespaces here
 }
-
-
-
-
